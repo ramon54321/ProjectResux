@@ -1,0 +1,30 @@
+package sux.client.rendering.layers
+
+import sux.client.rendering.DrawInfo
+import sux.client.rendering.drawing.Text.FontStyle
+import sux.client.rendering.drawing.{Circle, Text}
+import sux.common.math.{Vector2D, Vector2F}
+
+class DebugSpacialRenderLayer extends RenderLayer {
+
+  private val stylePoints = "rgba(230, 96, 67, 0.8)"
+  private val styleFont = "rgba(255, 255, 255, 0.8)"
+  private val pointCanvasRadius = 4.0
+
+  override def draw(drawInfo: DrawInfo): Unit = {
+    drawInfo.context.fillStyle = stylePoints
+
+    Circle.drawCircleFill(drawInfo, drawInfo.screenRect.topLeft, pointCanvasRadius * 2)
+    Circle.drawCircleFill(drawInfo, drawInfo.screenRect.bottomRight, pointCanvasRadius * 2)
+
+    Circle.drawCircleFill(drawInfo, Vector2F(0f, 0f), pointCanvasRadius)
+    Circle.drawCircleFill(drawInfo, Vector2F(100.0f, 0.0f), pointCanvasRadius)
+    Circle.drawCircleFill(drawInfo, Vector2F(1000.0f, 0.0f), pointCanvasRadius)
+
+    drawInfo.context.fillStyle = styleFont
+    Text.setFont(drawInfo, FontStyle.STATIC_TINY)
+    Text.drawText(drawInfo, Vector2F(0f, 0f), Vector2D(10, 10), "Origin")
+    Text.drawText(drawInfo, Vector2F(100f, 0f), Vector2D(10, 10), "100m")
+    Text.drawText(drawInfo, Vector2F(1000f, 0f), Vector2D(10, 10), "1,000m")
+  }
+}

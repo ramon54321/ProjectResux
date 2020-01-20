@@ -1,0 +1,26 @@
+package sux.client.rendering.drawing
+
+import sux.client.rendering.{DrawInfo, Mapping}
+import sux.common.math.Vector2F
+
+object Line {
+  def drawLine(drawInfo: DrawInfo, worldStart: Vector2F, worldEnd: Vector2F): Unit = {
+    val canvasStart = Mapping.worldSpaceToCanvasSpace(drawInfo, worldStart)
+    val canvasEnd = Mapping.worldSpaceToCanvasSpace(drawInfo, worldEnd)
+    drawInfo.context.beginPath()
+    drawInfo.context.moveTo(canvasStart.x, canvasStart.y)
+    drawInfo.context.lineTo(canvasEnd.x, canvasEnd.y)
+    drawInfo.context.stroke()
+  }
+
+  def drawPath(drawInfo: DrawInfo, worldPoints: List[Vector2F]): Unit = {
+    if (worldPoints.size < 2) {
+      return
+    }
+    val canvasPoints = worldPoints.map(worldPoint => Mapping.worldSpaceToCanvasSpace(drawInfo, worldPoint))
+    drawInfo.context.beginPath()
+    drawInfo.context.moveTo(canvasPoints.head.x, canvasPoints.head.y)
+    canvasPoints.tail.foreach(canvasPoint => drawInfo.context.lineTo(canvasPoint.x, canvasPoint.y))
+    drawInfo.context.stroke()
+  }
+}
