@@ -7,6 +7,9 @@ import sux.common.actions.WorldActions.WorldAction
 import sux.common.state.WorldState
 import sux.server.net.WebSocketServer
 
+import scala.collection.mutable
+import util.control.Breaks._
+
 object Main extends App {
 
   def patchWorldStateWithWorldActionAndDispatch(webSocketServer: WebSocketServer, worldState: WorldState, worldAction: WorldAction): Unit = {
@@ -21,23 +24,45 @@ object Main extends App {
   }
 
   override def main(args: Array[String]): Unit = {
-
+    /**
+     * State
+     */
     val worldState = new WorldState
+    val clientActionQueue = new mutable.Queue[ClientAction]
 
+    /**
+     * WebSocket Connection
+     */
     var webSocketServer: WebSocketServer = null
-    val socketServerThread = new Thread {
-      override def run() {
-        webSocketServer = new WebSocketServer(8081, webSocketMessage => {
-          val clientAction = ClientActions.Serializer.fromJson(webSocketMessage.message).get
-          handleClientAction(webSocketServer, worldState, clientAction)
-        })
-      }
-    }
-    socketServerThread.start()
+    webSocketServer = new WebSocketServer(11101, webSocketMessage => {
+      ClientActions.Serializer.fromJson(webSocketMessage.message)
+        .map(clientActionQueue.enqueue(_))
+    })
 
+    /**
+     * Client Action Processing
+     */
+    new Thread {
+      override def run(): Unit = {
+        while(true) {
+          println("[MAIN] Processing")
+          breakable {
+            if (clientActionQueue.isEmpty) {
+              Thread.sleep(1000)
+              break
+            }
+            clientActionQueue.foreach(handleClientAction(webSocketServer, worldState, _))
+          }
+        }
+      }
+    }.start()
+
+    /**
+     * Shutdown
+     */
     Runtime.getRuntime.addShutdownHook(new Thread {
       override def run() {
-        println("Shutting down WebSocketServer")
+        println("[MAIN] Shutting down WebSocketServer")
         webSocketServer.stop()
       }
     })

@@ -3,7 +3,9 @@
   <component name="ScalaCompilerConfiguration">
     <option name="higherKinds" value="true" />
     <option name="incrementalityType" value="SBT" />
-    <profile name="sbt 1" modules="ProjectResux,jvm.server,projectresux,server,utils" />
+    <profile name="sbt 1" modules="ProjectResux,projectresux,server,utils">
+      <option name="implicitConversions" value="true" />
+    </profile>
     <profile name="sbt 2" modules="client,js.client">
       <plugins>
         <plugin path="$USER_HOME$/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-js/scalajs-compiler_2.12.10/0.6.31/scalajs-compiler_2.12.10-0.6.31.jar" />
@@ -14,5 +16,6 @@
         <parameter value="-Ypartial-unification" />
       </parameters>
     </profile>
+    <profile name="sbt 4" modules="jvm.server,scratch" />
   </component>
 </project>

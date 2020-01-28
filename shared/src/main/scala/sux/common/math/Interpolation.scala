@@ -15,4 +15,8 @@ object Interpolation {
     a * (1 - t) + b * t
   }
 
+  def interpolate(lowerKey: Long, upperKey: Long, lowerValue: Float, upperValue: Float, key: Long): Float = {
+    val t = Interpolation.inverseLerp(lowerKey, upperKey, key)
+    if (lowerValue == upperValue) lowerValue else lerp(lowerValue, upperValue, t)
+  }
 }

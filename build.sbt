@@ -32,7 +32,10 @@ lazy val main = crossProject(JSPlatform, JVMPlatform)
     mainClass in assembly := Some("sux.server.Main"),
     assemblyJarName in assembly := "sux_server.jar",
     libraryDependencies += "org.java-websocket" % "Java-WebSocket" % "1.4.0",
+    libraryDependencies += "org.slf4j" % "slf4j-simple" % "1.6.2"
   )
+
+lazy val scratch = project.in(file("scratch")).dependsOn(main.jvm)
 
 lazy val server = main.jvm
 lazy val client = main.js

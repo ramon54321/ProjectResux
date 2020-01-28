@@ -24,7 +24,12 @@ object Main {
     /**
      * Connect to Server
      */
-    val webSocket = new WebSocket("ws://localhost:8081")
+    println("Starting websocket")
+//    val webSocket = new WebSocket("ws://104.248.21.234:11101")
+    val webSocket = new WebSocket("ws://127.0.0.1:11101")
+    webSocket.onerror = err => println(err)
+    webSocket.onopen = event => println("Open " + event)
+    webSocket.onclose = event => println("Close " + event)
     webSocket.onmessage = event => {
       handleWorldAction(worldState, WorldActions.Serializer.fromJson(event.data.asInstanceOf[String]).get)
     }

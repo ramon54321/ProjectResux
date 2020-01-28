@@ -1,7 +1,7 @@
 package sux.common.utils
 
 import cats.implicits._
-import ListExtensions._
+import CollectionExtensions._
 
 object Pair {
 

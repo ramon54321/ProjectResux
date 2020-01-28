@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": ".",
+			"name": "Root"
+		},
+		{
+			"path": "http",
+			"name": "HTTP"
+		}
+	],
+	"settings": {}
+}

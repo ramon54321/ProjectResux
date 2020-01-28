@@ -24,5 +24,6 @@
     <orderEntry type="library" name="sbt: io.circe:circe-parser_2.12:0.12.3:jar" level="project" />
     <orderEntry type="library" name="sbt: org.typelevel:jawn-parser_2.12:0.14.2:jar" level="project" />
     <orderEntry type="library" name="sbt: org.typelevel:macro-compat_2.12:1.1.1:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.slf4j:slf4j-simple:1.6.2:jar" level="project" />
   </component>
 </module>
