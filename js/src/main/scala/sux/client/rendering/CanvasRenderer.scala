@@ -6,7 +6,7 @@ import sux.common.state.WorldState
 import org.scalajs.dom.{document, window}
 import org.scalajs.dom.raw.{HTMLCanvasElement, UIEvent}
 import sux.client.InterfaceState
-import sux.client.rendering.extensions.{ExtendedCanvasRenderingContext2D, Path2D}
+import sux.client.rendering.extensions.ExtendedCanvasRenderingContext2D
 import sux.client.rendering.layers.{BackgroundGradientRenderLayer, BackgroundGridRenderLayer, DebugBuildInfoRenderLayer, DebugSpacialRenderLayer, RenderLayer}
 
 import scala.collection.mutable
