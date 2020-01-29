@@ -13,7 +13,8 @@ class DebugBuildInfoRenderLayer extends RenderLayer {
   override def draw(drawInfo: DrawInfo): Unit = {
     drawInfo.context.fillStyle = styleFont
     Text.setFont(drawInfo, FontStyle.STATIC_TINY)
-    Text.drawTextCanvasSpace(drawInfo, Vector2D(15.0, 25.0), f"${Config.label} v${Config.version} - ${Config.commitHash} - ${Config.commitAuthor}")
-    Text.drawTextCanvasSpace(drawInfo, Vector2D(15.0, 40.0), f"Build: ${Config.clientBuildHashShort}")
+    Text.drawTextCanvasSpace(drawInfo, Vector2D(15.0, 25.0), f"Version: ${Config.version} @ ${Config.commitHash} by ${Config.commitAuthor}")
+    Text.drawTextCanvasSpace(drawInfo, Vector2D(15.0, 40.0), f"Build: ${Config.clientBuildHashShort} - ${Config.buildDate}")
+    Text.drawTextCanvasSpace(drawInfo, Vector2D(15.0, 55.0), f"Config: ${Config.label}")
   }
 }
