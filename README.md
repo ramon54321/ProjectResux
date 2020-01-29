@@ -4,6 +4,7 @@
 #### 0.0.2
 
 - [ ] Add server logger
+- [ ] Create release script to increment version and deploy
 
 #### 0.0.1
 
