@@ -14,6 +14,7 @@
     <profile name="sbt 3" modules="root">
       <parameters>
         <parameter value="-Ypartial-unification" />
+        <parameter value="-Ypartial-unification" />
       </parameters>
     </profile>
     <profile name="sbt 4" modules="jvm.server,scratch" />
