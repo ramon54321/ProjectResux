@@ -17,6 +17,7 @@ As of `0.0.2` there is no automated release script yet. A release can be done th
 
 - [ ] Add server logger
 - [x] Add start scripts
+- [ ] Create initial Vector Render System
 - [x] Add Path2D JS interface
 - [x] Extend rendering context with Path2D
 - [ ] ~~Create release script to increment version and deploy~~
@@ -40,3 +41,9 @@ Initial Canvas Debug Renderer, Input Handler, Camera, Action Serialization and D
 - [x] Initial Input Handling
 - [x] Canvas Renderer
 - [x] Debug Render Layers
+
+### Proposals
+
+#### Vector Render System
+
+TODO
