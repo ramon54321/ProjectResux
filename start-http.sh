@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
 
-cd build/client
-npm run start
+npm run start --prefix build/http
