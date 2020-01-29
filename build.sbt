@@ -11,7 +11,6 @@ lazy val main = crossProject(JSPlatform, JVMPlatform)
   .in(file("."))
   .settings(
     version := "0.0.1",
-    libraryDependencies += "com.github.benhutchison" %%% "prickle" % "1.1.13",
     libraryDependencies += "org.typelevel" %%% "cats-macros" % "2.0.0",
     libraryDependencies += "org.typelevel" %%% "cats-kernel" % "2.0.0",
     libraryDependencies += "org.typelevel" %%% "cats-core" % "2.0.0",
