@@ -17,6 +17,8 @@ As of `0.0.2` there is no automated release script yet. A release can be done th
 
 - [ ] Add server logger
 - [x] Add start scripts
+- [x] Add Path2D JS interface
+- [x] Extend rendering context with Path2D
 - [ ] ~~Create release script to increment version and deploy~~
 
 #### 0.0.1
