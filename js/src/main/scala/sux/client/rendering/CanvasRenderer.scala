@@ -4,8 +4,9 @@ import sux.client.utils.Browser
 import sux.common.math.{MutableRectV2F, MutableVector2D, Vector2D, Vector2F}
 import sux.common.state.WorldState
 import org.scalajs.dom.{document, window}
-import org.scalajs.dom.raw.{CanvasRenderingContext2D, HTMLCanvasElement, UIEvent}
+import org.scalajs.dom.raw.{HTMLCanvasElement, UIEvent}
 import sux.client.InterfaceState
+import sux.client.rendering.extensions.{ExtendedCanvasRenderingContext2D, Path2D}
 import sux.client.rendering.layers.{BackgroundGradientRenderLayer, BackgroundGridRenderLayer, DebugBuildInfoRenderLayer, DebugSpacialRenderLayer, RenderLayer}
 
 import scala.collection.mutable
@@ -13,7 +14,7 @@ import scala.collection.mutable
 class CanvasRenderer(private val worldState: WorldState, private var camera: Camera) {
   private val canvas: HTMLCanvasElement = document.createElement("canvas").asInstanceOf[HTMLCanvasElement]
   private val drawInfo: DrawInfo = DrawInfo(
-    canvas.getContext("2d").asInstanceOf[CanvasRenderingContext2D],
+    canvas.getContext("2d").asInstanceOf[ExtendedCanvasRenderingContext2D],
     MutableVector2D(0.0, 0.0),
     MutableRectV2F(Vector2F(0f, 0f), Vector2F(0f, 0f)),
     camera
