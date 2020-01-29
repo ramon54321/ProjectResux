@@ -2,6 +2,12 @@
 
 echo Building Server
 
+if [ -n "$(git status --untracked-files=no --porcelain)" ]
+then
+  echo -- Git working directory not clean
+  exit 1
+fi
+
 rm -rf build/server
 mkdir -p build/server
 

@@ -7,6 +7,11 @@ then
   echo Building Client for Development
 else
   echo Building Client for Production
+  if [ -n "$(git status --untracked-files=no --porcelain)" ]
+  then
+    echo -- Git working directory not clean
+    exit 1
+  fi
 fi
 
 rm -rf build/client
