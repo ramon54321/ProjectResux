@@ -10,7 +10,7 @@ lazy val main = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Full)
   .in(file("."))
   .settings(
-    version := "0.0.2",
+    version := "0.0.2a",
     libraryDependencies += "org.typelevel" %%% "cats-macros" % "2.0.0",
     libraryDependencies += "org.typelevel" %%% "cats-kernel" % "2.0.0",
     libraryDependencies += "org.typelevel" %%% "cats-core" % "2.0.0",
