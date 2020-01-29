@@ -46,8 +46,8 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
   }
 
   private def setCanvasDimensions(): Unit = {
-    val screenWidth = Browser.getWindowWidth()
-    val screenHeight = Browser.getWindowHeight()
+    val screenWidth = Browser.getWindowWidth
+    val screenHeight = Browser.getWindowHeight
     camera.aspectRatio = screenWidth / screenHeight.toFloat
     canvas.width = screenWidth * 2
     canvas.height = screenHeight * 2
