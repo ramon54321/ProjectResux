@@ -1,7 +1,7 @@
 
 ### Release Process
 
-As of 0.0.2 there is no automated release script. A release can be done the following way.
+As of `0.0.2` there is no automated release script yet. A release can be done the following way.
 
  1. Ensure all TODOs for the version are either completed or closed
  2. Ensure clean git status
