@@ -32,9 +32,11 @@ source project.config
 COMMIT_HASH=$(git log --pretty=format:"%h" HEAD^1..HEAD)
 COMMIT_AUTHOR=$(git log --pretty=format:"%cn" HEAD^1..HEAD)
 CLIENT_BUILD_HASH=$(shasum ./build/client/sux_client.js | awk '{split($0,a,"  "); print a[1]}')
+BUILD_DATE=$(date '+%d.%m.%Y %H:%M')
 sed -i '' "3i\\
 \\ \\ version: \"${VERSION}\",\\
 \\ \\ commitHash: \"${COMMIT_HASH}\",\\
 \\ \\ commitAuthor: \"${COMMIT_AUTHOR}\",\\
-\\ \\ clientBuildHash: \"${CLIENT_BUILD_HASH}\",
+\\ \\ clientBuildHash: \"${CLIENT_BUILD_HASH}\",\\
+\\ \\ buildDate: \"${BUILD_DATE}\",
 " build/client/sux_config.js
