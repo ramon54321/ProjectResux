@@ -1,10 +1,23 @@
 
+### Release Process
+
+As of 0.0.2 there is no automated release script. A release can be done the following way.
+
+ 1. Ensure all TODOs for the version are either completed or closed
+ 2. Ensure clean git status
+ 3. Increment version in `project.config` and `build.sbt`
+ 4. Build with `./build.sh`
+ 5. Deploy with `.deploy.sh`
+ 6. SSH into the remote host with `./ssh.sh`
+ 7. Restart `Http` and `Server`
+
 ### Todo
 
 #### 0.0.2
 
 - [ ] Add server logger
-- [ ] Create release script to increment version and deploy
+- [ ] Add start scripts
+- [ ] ~~Create release script to increment version and deploy~~
 
 #### 0.0.1
 
