@@ -12,6 +12,10 @@ app.get('/sux_client.js', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/sux_client.js'))
 })
 
+app.get('/sux_config.js', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/sux_config.js'))
+})
+
 app.get('/sux_dependencies.js', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/sux_dependencies.js'))
 })

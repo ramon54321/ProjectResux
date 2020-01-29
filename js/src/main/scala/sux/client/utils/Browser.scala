@@ -9,7 +9,7 @@ object Browser {
     document.body.style.position = "fixed"
   }
 
-  def getWindowWidth(): Int = window.innerWidth.toInt
+  def getWindowWidth: Int = window.innerWidth.toInt
 
-  def getWindowHeight(): Int = window.innerHeight.toInt
+  def getWindowHeight: Int = window.innerHeight.toInt
 }

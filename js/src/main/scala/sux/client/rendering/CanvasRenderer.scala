@@ -6,7 +6,7 @@ import sux.common.state.WorldState
 import org.scalajs.dom.{document, window}
 import org.scalajs.dom.raw.{CanvasRenderingContext2D, HTMLCanvasElement, UIEvent}
 import sux.client.InterfaceState
-import sux.client.rendering.layers.{BackgroundGradientRenderLayer, BackgroundGridRenderLayer, DebugSpacialRenderLayer, RenderLayer}
+import sux.client.rendering.layers.{BackgroundGradientRenderLayer, BackgroundGridRenderLayer, DebugBuildInfoRenderLayer, DebugSpacialRenderLayer, RenderLayer}
 
 import scala.collection.mutable
 
@@ -42,6 +42,7 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
     renderLayers += new BackgroundGradientRenderLayer(drawInfo)
     renderLayers += new BackgroundGridRenderLayer()
     renderLayers += new DebugSpacialRenderLayer()
+    renderLayers += new DebugBuildInfoRenderLayer()
   }
 
   private def setCanvasDimensions(): Unit = {

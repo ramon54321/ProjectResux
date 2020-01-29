@@ -25,7 +25,7 @@ object Main extends App {
 
   override def main(args: Array[String]): Unit = {
     /**
-     * State
+     * Initialize Data Structures
      */
     val worldState = new WorldState
     val clientActionQueue = new mutable.Queue[ClientAction]
@@ -45,13 +45,12 @@ object Main extends App {
     new Thread {
       override def run(): Unit = {
         while(true) {
-          println("[MAIN] Processing")
           breakable {
             if (clientActionQueue.isEmpty) {
               Thread.sleep(1000)
               break
             }
-            clientActionQueue.foreach(handleClientAction(webSocketServer, worldState, _))
+            handleClientAction(webSocketServer, worldState, clientActionQueue.dequeue())
           }
         }
       }

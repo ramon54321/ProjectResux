@@ -1,12 +1,11 @@
 package sux.client
 
 import org.scalajs.dom.raw.WebSocket
+import scala.scalajs.js.Date
 import sux.client.rendering.{Camera, CanvasRenderer}
 import sux.common.actions.{ClientActions, WorldActions}
 import sux.common.actions.WorldActions.WorldAction
 import sux.common.state.WorldState
-
-import scala.scalajs.js.Date
 
 object Main {
 
@@ -16,6 +15,8 @@ object Main {
 
   def main(args: Array[String]): Unit = {
 
+    println(f"[Main] Using ${Config.label} config")
+
     /**
      * Initialize Data Structures
      */
@@ -24,21 +25,22 @@ object Main {
     /**
      * Connect to Server
      */
-    println("Starting websocket")
-//    val webSocket = new WebSocket("ws://104.248.21.234:11101")
-    val webSocket = new WebSocket("ws://127.0.0.1:11101")
-    webSocket.onerror = err => println(err)
-    webSocket.onopen = event => println("Open " + event)
-    webSocket.onclose = event => println("Close " + event)
-    webSocket.onmessage = event => {
-      handleWorldAction(worldState, WorldActions.Serializer.fromJson(event.data.asInstanceOf[String]).get)
+    val serverAddress = f"ws://${Config.serverHost}:${Config.serverPort}"
+    println(s"[Main] Connecting to server at ${serverAddress}")
+    val webSocket = new WebSocket(serverAddress)
+    webSocket.onerror = _ => println("[WS] Error")
+    webSocket.onopen = _ => {
+      println(f"[WS] Connected to server at ${serverAddress}")
+      webSocket.send(ClientActions.Serializer.toJson(ClientActions.Ping(Date.now().toLong)))
     }
+    webSocket.onclose = _ => println("[WS] Closed connection")
+    webSocket.onmessage = event =>
+      WorldActions.Serializer.fromJson(event.data.asInstanceOf[String])
+        .map(handleWorldAction(worldState, _))
 
     /**
      * Setup Renderer
      */
     val renderer = new CanvasRenderer(worldState, new Camera())
-
-    webSocket.onopen = event => webSocket.send(ClientActions.Serializer.toJson(ClientActions.Ping(Date.now().toLong)))
   }
 }
