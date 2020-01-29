@@ -33,8 +33,8 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
     setCanvasDimensions()
     renderLayers.foreach(_.onCanvasResize(drawInfo))
   }
-  document.onkeydown = (key) => InterfaceState.setKeyDown(Mapping.mapKeyCodeToKey(key.keyCode))
-  document.onkeyup = (key) => InterfaceState.setKeyUp(Mapping.mapKeyCodeToKey(key.keyCode))
+  document.onkeydown = key => InterfaceState.setKeyDown(Mapping.mapKeyCodeToKey(key.keyCode))
+  document.onkeyup = key => InterfaceState.setKeyUp(Mapping.mapKeyCodeToKey(key.keyCode))
 
   // Start Draw
   draw(drawInfo)
