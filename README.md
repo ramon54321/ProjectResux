@@ -42,10 +42,11 @@ As of `0.0.2` there is no automated release script yet. A release can be done th
  1. Ensure all TODOs for the version are either completed or closed
  2. Ensure clean git status
  3. Increment version in `project.config` and `build.sbt`
- 4. Build with `./build.sh`
- 5. Deploy with `.deploy.sh`
- 6. SSH into the remote host with `./ssh.sh`
- 7. Restart `Http` and `Server` with `./start-http.sh` and `./start-server.sh`
+ 4. Commit version change
+ 5. Build with `./build.sh`
+ 6. Deploy with `./deploy.sh`
+ 7. SSH into the remote host with `./ssh.sh`
+ 8. Restart `Http` and `Server` with `./start-http.sh` and `./start-server.sh`
 
 ### Todo
 
