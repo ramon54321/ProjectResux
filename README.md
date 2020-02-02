@@ -3,11 +3,11 @@ Project Resux is the latest iteration, as of Feb 2020, in a series of projects s
 
 As it currently stands, the project has a few key points of ideology which it strives to follow, known as the 'Pillars of Development'.
 
- - Separation of Client and Server
+ - Separated Client and Server
  - Scalable
  - Modular, Robust and Extendable
 
-#### Separation of Client and Server
+#### Separated Client and Server
 
 The first Pillar of Development is that of maintaining a separation between the client and server. The idea is that the client is, and will always be, regardless of gameplay, simply a 'viewer of deterministic state'. The server and only the server is responsible for changing the game state, which is then simply 'viewed' by the client. If the client wishes to change the state of the game, it can request the change from the server, which then may or may not make the change, depending on it's gameplay logic.
 
