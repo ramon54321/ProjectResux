@@ -1,5 +1,6 @@
 package sux.client.rendering.drawing
 
+import sux.client.debug.RenderStatistics
 import sux.client.rendering.{DrawInfo, Mapping}
 import sux.common.math.Vector2F
 
@@ -11,6 +12,7 @@ object Line {
     drawInfo.context.moveTo(canvasStart.x, canvasStart.y)
     drawInfo.context.lineTo(canvasEnd.x, canvasEnd.y)
     drawInfo.context.stroke()
+    RenderStatistics.drawLineCount += 1
   }
 
   def drawPath(drawInfo: DrawInfo, worldPoints: List[Vector2F]): Unit = {
@@ -22,5 +24,6 @@ object Line {
     drawInfo.context.moveTo(canvasPoints.head.x, canvasPoints.head.y)
     canvasPoints.tail.foreach(canvasPoint => drawInfo.context.lineTo(canvasPoint.x, canvasPoint.y))
     drawInfo.context.stroke()
+    RenderStatistics.drawLineCount += 1
   }
 }

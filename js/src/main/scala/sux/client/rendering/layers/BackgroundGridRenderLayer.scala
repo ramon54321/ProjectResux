@@ -1,5 +1,6 @@
 package sux.client.rendering.layers
 
+import sux.client.debug.Timer
 import sux.client.rendering.DrawInfo
 import sux.client.rendering.drawing.Line._
 import sux.common.math.{Spread, Vector2F}
@@ -7,6 +8,8 @@ import sux.common.math.{Spread, Vector2F}
 import scala.math.abs
 
 class BackgroundGridRenderLayer extends RenderLayer {
+
+  private val timer = new Timer("Grid")
 
   private val styleMinor = "rgba(255, 255, 255, 0.04)"
   private val styleMajor = "rgba(255, 255, 255, 0.10)"
@@ -17,11 +20,12 @@ class BackgroundGridRenderLayer extends RenderLayer {
   private val minor = 2f
 
   override def draw(drawInfo: DrawInfo) {
+    timer.markStart()
 
-    val xStart = Spread.floored(2, drawInfo.screenRect.topLeft.x)
-    val xEnd = Spread.ceiled(2, drawInfo.screenRect.bottomRight.x)
-    val yStart = Spread.floored(2, drawInfo.screenRect.bottomRight.y)
-    val yEnd = Spread.ceiled(2, drawInfo.screenRect.topLeft.y)
+    val xStart = Spread.floored(2, drawInfo.screenWorldRect.topLeft.x)
+    val xEnd = Spread.ceiled(2, drawInfo.screenWorldRect.bottomRight.x)
+    val yStart = Spread.floored(2, drawInfo.screenWorldRect.bottomRight.y)
+    val yEnd = Spread.ceiled(2, drawInfo.screenWorldRect.topLeft.y)
     val width = abs(xStart - xEnd)
     val scale = if (width > 250) "Big" else "Small"
 
@@ -58,5 +62,7 @@ class BackgroundGridRenderLayer extends RenderLayer {
       }
       yCurrent += minor
     }
+
+    timer.markEnd()
   }
 }

@@ -5,9 +5,10 @@ import sux.common.math.{MutableRectV2F, MutableVector2D, Vector2D, Vector2F}
 import sux.common.state.WorldState
 import org.scalajs.dom.{document, window}
 import org.scalajs.dom.raw.{HTMLCanvasElement, UIEvent}
-import sux.client.InterfaceState
+import sux.client.debug.{RenderStatistics, Timer}
+import sux.client.{Config, InterfaceState}
 import sux.client.rendering.extensions.ExtendedCanvasRenderingContext2D
-import sux.client.rendering.layers.{BackgroundGradientRenderLayer, BackgroundGridRenderLayer, DebugBuildInfoRenderLayer, DebugSpacialRenderLayer, RenderLayer}
+import sux.client.rendering.layers.{BackgroundGradientRenderLayer, BackgroundGridRenderLayer, DebugBuildInfoRenderLayer, DebugCanvasRenderLayer, DebugSpacialRenderLayer, RenderLayer}
 
 import scala.collection.mutable
 
@@ -21,6 +22,11 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
   )
 
   private val renderLayers: mutable.MutableList[RenderLayer] = new mutable.MutableList[RenderLayer]
+
+  private val updateTimer = new Timer("Update")
+  private val renderTimer = new Timer("Render")
+
+  private var frameCounter = 0
 
   // Initial Setup
   Browser.resetWindow()
@@ -44,6 +50,7 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
     renderLayers += new BackgroundGridRenderLayer()
     renderLayers += new DebugSpacialRenderLayer()
     renderLayers += new DebugBuildInfoRenderLayer()
+    renderLayers += new DebugCanvasRenderLayer()
   }
 
   private def setCanvasDimensions(): Unit = {
@@ -60,7 +67,13 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
   }
 
   // TODO: Move out of renderer
+  private def slowUpdate(): Unit = {
+    RenderStatistics.print()
+  }
+
   private def update(): Unit = {
+    RenderStatistics.reset()
+
     val squareScope = drawInfo.camera.scope * drawInfo.camera.scope
     if (InterfaceState.getKey("q") && squareScope < camera.scopeSquareMax) {
       drawInfo.camera.scope += camera.scopeRate
@@ -80,6 +93,12 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
     if (InterfaceState.getKey("s")) {
       drawInfo.camera.panY -= camera.panRate * squareScope
     }
+
+    // After Camera Update
+    val lateSquareScope = drawInfo.camera.scope * drawInfo.camera.scope
+    drawInfo.camera.scale = (500 / Config.spritePixelsPerMeter) / lateSquareScope
+    drawInfo.screenWorldRect.topLeft = Mapping.canvasSpaceToWorldSpace(drawInfo, Vector2D(0.0, 0.0))
+    drawInfo.screenWorldRect.bottomRight = Mapping.canvasSpaceToWorldSpace(drawInfo, Vector2D(drawInfo.canvasSize.x, drawInfo.canvasSize.y))
   }
 
   private def clear(): Unit = {
@@ -88,17 +107,21 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
 
   private def draw(drawInfo: DrawInfo): Unit = {
     window.requestAnimationFrame((_: Double) => draw(drawInfo))
+    frameCounter += 1
+    if (frameCounter % 120 == 0) slowUpdate()
 
     // Update
+    updateTimer.markStart()
     update()
-    drawInfo.screenRect.topLeft = Mapping.canvasSpaceToWorldSpace(drawInfo, Vector2D(0.0, 0.0))
-    drawInfo.screenRect.bottomRight = Mapping.canvasSpaceToWorldSpace(drawInfo, Vector2D(drawInfo.canvasSize.x, drawInfo.canvasSize.y))
+    updateTimer.markEnd()
 
     // Render
+    renderTimer.markStart()
     clear()
 
     renderLayers.foreach(_.draw(drawInfo))
 
     drawInfo.context.fillStyle = "rgba(255, 255, 255, 0.85)"
+    renderTimer.markEnd()
   }
 }

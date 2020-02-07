@@ -5,5 +5,5 @@ import sux.common.math.{MutableRectV2F, MutableVector2D}
 
 case class DrawInfo(context: ExtendedCanvasRenderingContext2D,
                     canvasSize: MutableVector2D,
-                    screenRect: MutableRectV2F,
+                    screenWorldRect: MutableRectV2F,
                     var camera: Camera)

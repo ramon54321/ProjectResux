@@ -14,8 +14,8 @@ class DebugSpacialRenderLayer extends RenderLayer {
   override def draw(drawInfo: DrawInfo): Unit = {
     drawInfo.context.fillStyle = stylePoints
 
-    Circle.drawCircleFill(drawInfo, drawInfo.screenRect.topLeft, pointCanvasRadius * 2)
-    Circle.drawCircleFill(drawInfo, drawInfo.screenRect.bottomRight, pointCanvasRadius * 2)
+    Circle.drawCircleFill(drawInfo, drawInfo.screenWorldRect.topLeft, pointCanvasRadius * 2, ignoreBounds = true)
+    Circle.drawCircleFill(drawInfo, drawInfo.screenWorldRect.bottomRight, pointCanvasRadius * 2, ignoreBounds = true)
 
     Circle.drawCircleFill(drawInfo, Vector2F(0f, 0f), pointCanvasRadius)
     Circle.drawCircleFill(drawInfo, Vector2F(100.0f, 0.0f), pointCanvasRadius)

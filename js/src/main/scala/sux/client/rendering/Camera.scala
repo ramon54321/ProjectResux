@@ -9,4 +9,5 @@ class Camera {
   val scopeSquareMin: Float = 4f
   val scopeRate: Float = 0.2f
   var aspectRatio: Float = 0f
+  var scale: Float = 0f
 }

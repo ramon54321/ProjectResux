@@ -1,0 +1,83 @@
+
+<html>
+  <h3>Canvas drawImage Performance</h3>
+  <div id="viewerA" style="outline: 1px red solid; width: 512px; height: 512px;"></div>
+  <div id="viewerB" style="outline: 1px red solid; width: 512px; height: 512px;"></div>
+</html>
+
+<script>
+
+  function getDuration(iterations, loops, func) {
+    var total = 0
+    for (let i = 0; i < iterations; i++) {
+      performance.mark('a')
+      for (let i = 0; i < loops; i++) {
+        func()
+      }
+      performance.mark('b')
+      performance.measure('main', 'a', 'b')
+      const time = performance.getEntriesByType('measure')[0].duration
+      performance.clearMeasures()
+      total += time
+    }
+    total /= iterations
+    return total
+  }
+  
+  const canvasTarget = document.createElement('canvas')
+  canvasTarget.width = 512
+  canvasTarget.height = 512
+
+  const contextTarget = canvasTarget.getContext('2d')
+
+  document.getElementById('viewerA').appendChild(canvasTarget)
+
+  const path = new Path2D("M 0 0 L 100 0 L 100 100 L 0 100 z M 0 0 L 100 100 M 100 0 L 0 100")
+
+  const canvasSourceFull = document.createElement('canvas')
+  canvasSourceFull.width = 512
+  canvasSourceFull.height = 512
+
+  document.getElementById('viewerB').appendChild(canvasSourceFull)
+
+  const contextSourceFull = canvasSourceFull.getContext('2d')
+  contextSourceFull.stroke(path)
+
+
+  /// small
+
+  const canvasSourceSmall = document.createElement('canvas')
+  canvasSourceSmall.width = 128
+  canvasSourceSmall.height = 128
+
+  const contextSourceSmall = canvasSourceSmall.getContext('2d')
+  contextSourceSmall.stroke(path)
+
+  // tiny lod
+  const canvasSourceTiny = document.createElement('canvas')
+  canvasSourceTiny.width = 16
+  canvasSourceTiny.height = 16
+
+  const contextSourceTiny = canvasSourceTiny.getContext('2d')
+  contextSourceTiny.drawImage(canvasSourceSmall, 0, 0, 16, 16)
+
+
+  const smoothing = 100
+  const difficuilty = 2000
+
+
+  const stroke = getDuration(smoothing, difficuilty, () => contextTarget.stroke(path))
+  const drawFull = getDuration(smoothing, difficuilty, () => contextTarget.drawImage(canvasSourceFull, 128, 128))
+  const drawSmall = getDuration(smoothing, difficuilty, () => contextTarget.drawImage(canvasSourceSmall, 256, 256))
+  const drawSmallToTiny = getDuration(smoothing, difficuilty, () => contextTarget.drawImage(canvasSourceSmall, 0, 256, 16, 16))
+  const drawTinyToTiny = getDuration(smoothing, difficuilty, () => contextTarget.drawImage(canvasSourceTiny, 0, 320, 16, 16))
+  const drawTinyToSmall = getDuration(smoothing, difficuilty, () => contextTarget.drawImage(canvasSourceTiny, 128, 320, 128, 128))
+
+  console.log("stroke", stroke)
+  console.log("drawFull", drawFull)
+  console.log("drawSmall", drawSmall)
+  console.log("drawSmallToTiny", drawSmallToTiny)
+  console.log("drawTinyToTiny", drawTinyToTiny)
+  console.log("drawTinyToSmall", drawTinyToSmall)
+
+</script>

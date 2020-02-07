@@ -8,3 +8,8 @@ case class MutableRectD(var x: Double, var y: Double, var w: Double, var h: Doub
 
 case class RectV2F(topLeft: Vector2F, bottomRight: Vector2F)
 case class MutableRectV2F(var topLeft: Vector2F, var bottomRight: Vector2F)
+
+object Rect {
+  def isInBounds(rect: RectV2F, vector: Vector2F): Boolean = vector.x > rect.topLeft.x && vector.x < rect.bottomRight.x && vector.y < rect.topLeft.y && vector.y > rect.bottomRight.y
+  def isInBounds(rect: MutableRectV2F, vector: Vector2F): Boolean = vector.x > rect.topLeft.x && vector.x < rect.bottomRight.x && vector.y < rect.topLeft.y && vector.y > rect.bottomRight.y
+}

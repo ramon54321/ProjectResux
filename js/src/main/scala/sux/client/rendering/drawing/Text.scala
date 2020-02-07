@@ -1,7 +1,8 @@
 package sux.client.rendering.drawing
 
+import sux.client.debug.RenderStatistics
 import sux.client.rendering.{DrawInfo, Mapping}
-import sux.common.math.{Vector2D, Vector2F}
+import sux.common.math.{Rect, Vector2D, Vector2F}
 
 object Text {
   object FontStyle extends Enumeration {
@@ -20,16 +21,21 @@ object Text {
   }
 
   def drawText(drawInfo: DrawInfo, worldPosition: Vector2F, text: String): Unit = {
+    if (!Rect.isInBounds(drawInfo.screenWorldRect, worldPosition)) return
     val canvasPosition = Mapping.worldSpaceToCanvasSpace(drawInfo, worldPosition)
     drawInfo.context.fillText(text, canvasPosition.x, canvasPosition.y)
+    RenderStatistics.drawTextCount += 1
   }
 
   def drawText(drawInfo: DrawInfo, worldPosition: Vector2F, canvasOffset: Vector2D, text: String): Unit = {
+    if (!Rect.isInBounds(drawInfo.screenWorldRect, worldPosition)) return
     val canvasPosition = Vector2F.add(Mapping.worldSpaceToCanvasSpace(drawInfo, worldPosition).asVector2F(), Vector2F.scaleY(canvasOffset.asVector2F(), -1))
     drawInfo.context.fillText(text, canvasPosition.x, canvasPosition.y)
+    RenderStatistics.drawTextCount += 1
   }
 
   def drawTextCanvasSpace(drawInfo: DrawInfo, canvasPosition: Vector2D, text: String): Unit = {
     drawInfo.context.fillText(text, canvasPosition.x, canvasPosition.y)
+    RenderStatistics.drawTextCount += 1
   }
 }

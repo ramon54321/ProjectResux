@@ -15,6 +15,15 @@ object Config {
   val serverHost: String = init("serverHost").getOrElse("localhost").asInstanceOf[String]
   val serverPort: Int = init("serverPort").getOrElse(8080).asInstanceOf[Int]
 
+  val spriteLodCount: Int = init("spriteLodCount").getOrElse(5).asInstanceOf[Int]
+  val spriteLodBias: Float = init("spriteLodBias").getOrElse(1.5f).asInstanceOf[Float]
+  val spritePixelsPerMeter: Int = init("spritePixelsPerMeter").getOrElse(100).asInstanceOf[Int]
+  val spriteLodSourceMethod: SpriteLodSourceMethod = init("spriteLodSourceMethod").asInstanceOf[Option[String]] match {
+    case Some("PreviousLevel") => PreviousLevel()
+    case Some("FirstLevel") => FirstLevel()
+    case _ => FirstLevel()
+  }
+
   private def init(key: String): Option[js.Dynamic] = {
     val value = config.selectDynamic(key)
     if (js.isUndefined(value)) {
@@ -23,3 +32,7 @@ object Config {
     } else Some(value)
   }
 }
+
+sealed trait SpriteLodSourceMethod
+case class PreviousLevel() extends SpriteLodSourceMethod
+case class FirstLevel() extends SpriteLodSourceMethod
