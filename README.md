@@ -50,20 +50,33 @@ As of `0.0.2` there is no automated release script yet. A release can be done th
 
 ### Todo
 
+#### 0.0.3
+
+- [ ] Client mouse input
+- [ ] Click to select
+- [ ] Right click to move
+- [ ] Initial path system (Move concatenation, not path-finding)
+
+###### Optimizations
+
+- [ ] Minimize Draw calls in GridRenderLayer with Paths
+
 #### 0.0.2
 
 - [ ] Add server logger
 - [x] Add sprite rendering
 - [x] Entity Render Layer
+- [x] Performance Debug Timer
+- [x] Performance Debug Statistics
 - [x] Layout server orchestration
 - [x] Add DeterministicVector2F
 - [ ] Add creation and manipulation utilities for DeterministicVector2F
-- [ ] Add movement methods to orchestration
+- [ ] Add movement methods to orchestration (Teleport, Move from A to B, Move from Current to B)
 - [ ] Initial spec system
 - [x] Add attributes to entities
 - [ ] ~~Add sprite LODs~~ (Measurements reveal LODs are not needed)
 - [x] Add start scripts
-- [ ] Create initial Vector Render System
+- [ ] ~~Create initial Vector Render System~~ (Sprites will suffice for now)
 - [x] Add Path2D JS interface
 - [x] Extend rendering context with Path2D
 - [ ] ~~Create release script to increment version and deploy~~
