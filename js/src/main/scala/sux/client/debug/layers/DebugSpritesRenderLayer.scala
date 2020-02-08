@@ -1,11 +1,12 @@
-package sux.client.rendering.layers
+package sux.client.debug.layers
 
 import sux.client.debug.Timer
 import sux.client.rendering.drawing.Sprite
+import sux.client.rendering.layers.RenderLayer
 import sux.client.rendering.{DrawInfo, Sprite}
 import sux.common.math.Vector2F
 
-class DebugCanvasRenderLayer extends RenderLayer {
+class DebugSpritesRenderLayer extends RenderLayer {
   val timerSprites = new Timer("Debug Sprites")
   val mySprite = new Sprite(128, 128)
 

@@ -1,9 +1,10 @@
-package sux.client.rendering.layers
+package sux.client.debug.layers
 
 import sux.client.Config
 import sux.client.rendering.DrawInfo
-import sux.client.rendering.drawing.Text.FontStyle
 import sux.client.rendering.drawing.Text
+import sux.client.rendering.drawing.Text.FontStyle
+import sux.client.rendering.layers.RenderLayer
 import sux.common.math.Vector2D
 
 class DebugBuildInfoRenderLayer extends RenderLayer {

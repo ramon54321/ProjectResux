@@ -5,10 +5,11 @@ import sux.common.math.{MutableRectV2F, MutableVector2D, Vector2D, Vector2F}
 import sux.common.state.WorldState
 import org.scalajs.dom.{document, window}
 import org.scalajs.dom.raw.{HTMLCanvasElement, UIEvent}
+import sux.client.debug.layers.{DebugBuildInfoRenderLayer, DebugSpacialRenderLayer, DebugSpritesRenderLayer}
 import sux.client.debug.{RenderStatistics, Timer}
 import sux.client.{Config, InterfaceState}
 import sux.client.rendering.extensions.ExtendedCanvasRenderingContext2D
-import sux.client.rendering.layers.{BackgroundGradientRenderLayer, BackgroundGridRenderLayer, DebugBuildInfoRenderLayer, DebugCanvasRenderLayer, DebugSpacialRenderLayer, RenderLayer}
+import sux.client.rendering.layers.{BackgroundGradientRenderLayer, BackgroundGridRenderLayer, RenderLayer}
 
 import scala.collection.mutable
 
@@ -50,7 +51,7 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
     renderLayers += new BackgroundGridRenderLayer()
     renderLayers += new DebugSpacialRenderLayer()
     renderLayers += new DebugBuildInfoRenderLayer()
-    renderLayers += new DebugCanvasRenderLayer()
+    renderLayers += new DebugSpritesRenderLayer()
   }
 
   private def setCanvasDimensions(): Unit = {

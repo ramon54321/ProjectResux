@@ -1,8 +1,9 @@
-package sux.client.rendering.layers
+package sux.client.debug.layers
 
 import sux.client.rendering.DrawInfo
 import sux.client.rendering.drawing.Text.FontStyle
 import sux.client.rendering.drawing.{Circle, Text}
+import sux.client.rendering.layers.RenderLayer
 import sux.common.math.{Vector2D, Vector2F}
 
 class DebugSpacialRenderLayer extends RenderLayer {
