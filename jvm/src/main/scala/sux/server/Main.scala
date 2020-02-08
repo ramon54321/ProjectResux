@@ -10,41 +10,37 @@ import sux.server.net.{WebSocketMessage, WebSocketServer}
 
 import scala.collection.mutable
 
+object Hub {
+  val worldState = new WorldState
+  val worldActionHistory = new mutable.ListBuffer[WorldAction]
+  val webSocketMessageQueue = new mutable.Queue[WebSocketMessage]
+  var webSocketServer: WebSocketServer = _
+}
+
 object Main extends App {
-
-  def patchWorldStateWithWorldActionAndDispatch(webSocketServer: WebSocketServer, worldState: WorldState, worldAction: WorldAction, worldActionHistory: mutable.ListBuffer[WorldAction]): Unit = {
-    worldActionHistory.append(worldAction)
-    worldState.patch(worldAction)
-    webSocketServer.broadcast(WorldActions.Serializer.toJson(worldAction))
+  def patchWorldStateWithWorldActionAndDispatch(worldAction: WorldAction): Unit = {
+    Hub.worldActionHistory.append(worldAction)
+    Hub.worldState.patch(worldAction)
+    Hub.webSocketServer.broadcast(WorldActions.Serializer.toJson(worldAction))
   }
 
-  def handleClientAction(webSocketServer: WebSocketServer, worldState: WorldState, clientAction: ClientAction, webSocket: WebSocket, worldActionHistory: mutable.ListBuffer[WorldAction]): Unit = clientAction match {
+  def handleClientAction(clientAction: ClientAction, webSocket: WebSocket): Unit = clientAction match {
     case ClientActions.Ping(timestamp) => {
-      patchWorldStateWithWorldActionAndDispatch(webSocketServer, worldState, WorldActions.Ping(timestamp), worldActionHistory)
+      patchWorldStateWithWorldActionAndDispatch(WorldActions.Ping(timestamp))
     }
-    case ClientActions.FullStateUpdate() => worldActionHistory.foreach(worldAction => webSocket.send(WorldActions.Serializer.toJson(worldAction)))
+    case ClientActions.FullStateUpdate() => Hub.worldActionHistory.foreach(worldAction => webSocket.send(WorldActions.Serializer.toJson(worldAction)))
   }
 
-  def debugAction(tickCount: Int, webSocketServer: WebSocketServer, worldState: WorldState, worldActionHistory: mutable.ListBuffer[WorldAction]): Unit = tickCount match {
-    case 10 => patchWorldStateWithWorldActionAndDispatch(webSocketServer, worldState, WorldActions.Spawn("e1", "man"), worldActionHistory)
+  def debugAction(tickCount: Int): Unit = tickCount match {
+    case 10 => patchWorldStateWithWorldActionAndDispatch(WorldActions.Spawn("e1", "man"))
     case _ =>
   }
 
   override def main(args: Array[String]): Unit = {
     /**
-     * Initialize Data Structures
-     */
-    val worldState = new WorldState
-    val worldActionHistory = new mutable.ListBuffer[WorldAction]
-    val webSocketMessageQueue = new mutable.Queue[WebSocketMessage]
-
-    /**
      * WebSocket Connection
      */
-    var webSocketServer: WebSocketServer = null
-    webSocketServer = new WebSocketServer(11101, webSocketMessage => {
-      webSocketMessageQueue.enqueue(webSocketMessage)
-    })
+    Hub.webSocketServer = new WebSocketServer(11101, webSocketMessage => Hub.webSocketMessageQueue.enqueue(webSocketMessage))
 
     /**
      * Client Action Processing
@@ -54,12 +50,12 @@ object Main extends App {
       override def run(): Unit = {
         while(true) {
           println(f"[TICK] ${tickCount}")
-          while (webSocketMessageQueue.nonEmpty) {
-            val webSocketMessage = webSocketMessageQueue.dequeue()
+          while (Hub.webSocketMessageQueue.nonEmpty) {
+            val webSocketMessage = Hub.webSocketMessageQueue.dequeue()
             ClientActions.Serializer.fromJson(webSocketMessage.message)
-              .map(handleClientAction(webSocketServer, worldState, _, webSocketMessage.webSocket, worldActionHistory))
+              .map(handleClientAction(_, webSocketMessage.webSocket))
           }
-          debugAction(tickCount, webSocketServer, worldState, worldActionHistory)
+          debugAction(tickCount)
           Thread.sleep(1000)
           tickCount += 1
         }
@@ -72,7 +68,7 @@ object Main extends App {
     Runtime.getRuntime.addShutdownHook(new Thread {
       override def run() {
         println("[MAIN] Shutting down WebSocketServer")
-        webSocketServer.stop()
+        Hub.webSocketServer.stop()
       }
     })
   }
