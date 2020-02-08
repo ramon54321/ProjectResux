@@ -16,30 +16,34 @@ object Hub {
   val worldActionHistory = new mutable.ListBuffer[WorldAction]
   val webSocketMessageQueue = new mutable.Queue[WebSocketMessage]
   var webSocketServer: WebSocketServer = _
-}
 
-object Main extends App {
-  def patchWorldStateWithWorldActionAndDispatch(worldAction: WorldAction): Unit = {
-    Hub.worldActionHistory.append(worldAction)
-    Hub.worldState.patch(worldAction)
+  def patchWorldState(worldAction: WorldAction): Unit = {
+    worldActionHistory.append(worldAction)
+    worldState.patch(worldAction)
     val worldActionJson = WorldActions.Serializer.toJson(worldAction)
     println(f"[DISPATCH] ${worldActionJson}")
-    Hub.webSocketServer.broadcast(worldActionJson)
+    webSocketServer.broadcast(worldActionJson)
   }
 
   def handleClientAction(clientAction: ClientAction, webSocket: WebSocket): Unit = clientAction match {
     case ClientActions.Ping(timestamp) => {
-      patchWorldStateWithWorldActionAndDispatch(WorldActions.Ping(timestamp))
+      patchWorldState(WorldActions.Ping(timestamp))
     }
-    case ClientActions.FullStateUpdate() => Hub.worldActionHistory.foreach(worldAction => webSocket.send(WorldActions.Serializer.toJson(worldAction)))
+    case ClientActions.FullStateUpdate() => worldActionHistory.foreach(worldAction => webSocket.send(WorldActions.Serializer.toJson(worldAction)))
   }
+}
 
+object Main extends App {
   def debugAction(tickCount: Int): Unit = tickCount match {
-    case 10 => patchWorldStateWithWorldActionAndDispatch(WorldActions.SpawnEntity("e1", "man", {
-      val now = System.currentTimeMillis()
-      DeterministicVector2F(LUTF(now -> 0f, now + 10000L -> 20f), LUTF(now -> 0f, now + 15000L -> 10f)).toSerializable
-    }))
-    case 25 => patchWorldStateWithWorldActionAndDispatch(WorldActions.SetEntityPosition("e1", {
+    case 10 => {
+      Hub.patchWorldState(WorldActions.SpawnEntity("e1", "man", {
+        val now = System.currentTimeMillis()
+        DeterministicVector2F(LUTF(now -> 0f, now + 10000L -> 20f), LUTF(now -> 0f, now + 15000L -> 10f)).toSerializable
+      }))
+      Hub.patchWorldState(WorldActions.SetEntityAttributeString("e1", "Name", "Alan P. Wilson"))
+    }
+    case 15 => Hub.patchWorldState(WorldActions.SetEntityAttributeFloat("e1", "Health", 100f))
+    case 25 => Hub.patchWorldState(WorldActions.SetEntityPosition("e1", {
       val now = System.currentTimeMillis()
       DeterministicVector2F(LUTF(now -> 20f, now + 10000L -> 10f), LUTF(now -> 5f, now + 15000L -> 15f)).toSerializable
     }))
@@ -63,7 +67,7 @@ object Main extends App {
           while (Hub.webSocketMessageQueue.nonEmpty) {
             val webSocketMessage = Hub.webSocketMessageQueue.dequeue()
             ClientActions.Serializer.fromJson(webSocketMessage.message)
-              .map(handleClientAction(_, webSocketMessage.webSocket))
+              .map(Hub.handleClientAction(_, webSocketMessage.webSocket))
           }
           debugAction(tickCount)
           Thread.sleep(1000)
