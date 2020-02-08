@@ -1,6 +1,7 @@
 package sux.common.math
 
-import scala.math.{sqrt, cos, sin, acos, atan2}
+import scala.collection.immutable.HashMap
+import scala.math.{acos, atan2, cos, sin, sqrt}
 
 case class Vector2D(x: Double, y: Double) {
   def asMutable(): MutableVector2D = {
@@ -33,6 +34,17 @@ case class MutableVector2F(var x: Float, var y: Float) {
   def asVector2D(): Vector2D = {
     Vector2D(x.toDouble, y.toDouble)
   }
+}
+
+case class DeterministicVector2F(private val x: LUTF, private val y: LUTF) extends Deterministic[Vector2F] {
+  override def lookup(t: Long): Vector2F = Vector2F(x.lookup(t), y.lookup(t))
+  def toSerializable: DeterministicVector2F.Serializable = HashMap("x" -> x.pointsSeq, "y" -> y.pointsSeq)
+}
+
+object DeterministicVector2F {
+  type Serializable = HashMap[String, Seq[(Long, Float)]]
+  def fromSerializable(serializable: Serializable): DeterministicVector2F =
+    new DeterministicVector2F(LUTF(serializable("x"):_*), LUTF(serializable("y"):_*))
 }
 
 object Vector2F {

@@ -5,6 +5,7 @@ import sux.common.actions.ClientActions
 import sux.common.actions.WorldActions
 import sux.common.actions.ClientActions.ClientAction
 import sux.common.actions.WorldActions.WorldAction
+import sux.common.math.{DeterministicVector2F, LUTF}
 import sux.common.state.WorldState
 import sux.server.net.{WebSocketMessage, WebSocketServer}
 
@@ -21,7 +22,9 @@ object Main extends App {
   def patchWorldStateWithWorldActionAndDispatch(worldAction: WorldAction): Unit = {
     Hub.worldActionHistory.append(worldAction)
     Hub.worldState.patch(worldAction)
-    Hub.webSocketServer.broadcast(WorldActions.Serializer.toJson(worldAction))
+    val worldActionJson = WorldActions.Serializer.toJson(worldAction)
+    println(f"[DISPATCH] ${worldActionJson}")
+    Hub.webSocketServer.broadcast(worldActionJson)
   }
 
   def handleClientAction(clientAction: ClientAction, webSocket: WebSocket): Unit = clientAction match {
@@ -32,7 +35,14 @@ object Main extends App {
   }
 
   def debugAction(tickCount: Int): Unit = tickCount match {
-    case 10 => patchWorldStateWithWorldActionAndDispatch(WorldActions.Spawn("e1", "man"))
+    case 10 => patchWorldStateWithWorldActionAndDispatch(WorldActions.SpawnEntity("e1", "man", {
+      val now = System.currentTimeMillis()
+      DeterministicVector2F(LUTF(now -> 0f, now + 10000L -> 20f), LUTF(now -> 0f, now + 15000L -> 10f)).toSerializable
+    }))
+    case 25 => patchWorldStateWithWorldActionAndDispatch(WorldActions.SetEntityPosition("e1", {
+      val now = System.currentTimeMillis()
+      DeterministicVector2F(LUTF(now -> 20f, now + 10000L -> 10f), LUTF(now -> 5f, now + 15000L -> 15f)).toSerializable
+    }))
     case _ =>
   }
 

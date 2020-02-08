@@ -21,10 +21,13 @@ protected class LUT[T](points: TreeMap[Long, T], interpolation: (Long, Long, T, 
       val upperValue = values(upperIndex)
       interpolation(lowerKey, upperKey, lowerValue, upperValue, t)
   }
+  def pointsSeq: Seq[(Long, T)] = keys.zip(values)
 }
 
-object LUT {
-  val identity = LUT(0L -> 0f, 1L -> 1f)
-  val inverse = LUT(0L -> 1f, 1L -> 0f)
-  def apply(points: (Long, Float)*): LUT[Float] = new LUT(TreeMap(points:_*), Interpolation.interpolate)
+class LUTF(points: TreeMap[Long, Float], interpolation: (Long, Long, Float, Float, Long) => Float) extends LUT[Float](points, interpolation)
+
+object LUTF {
+  val identity = LUTF(0L -> 0f, 1L -> 1f)
+  val inverse = LUTF(0L -> 1f, 1L -> 0f)
+  def apply(points: (Long, Float)*): LUTF = new LUTF(TreeMap(points:_*), Interpolation.interpolate)
 }
