@@ -51,6 +51,8 @@ object DeterministicVector2F {
   type Serializable = HashMap[String, Seq[(Long, Float)]]
   def fromSerializable(serializable: Serializable): DeterministicVector2F =
     new DeterministicVector2F(LUTF(serializable("x"):_*), LUTF(serializable("y"):_*))
+
+  // TODO: Create from Seq of Vector2F with times
 }
 
 object Vector2F {

@@ -53,8 +53,15 @@ As of `0.0.2` there is no automated release script yet. A release can be done th
 #### 0.0.2
 
 - [ ] Add server logger
-- [ ] Add sprite rendering
-- [ ] Add sprite LODs
+- [x] Add sprite rendering
+- [x] Entity Render Layer
+- [x] Layout server orchestration
+- [x] Add DeterministicVector2F
+- [ ] Add creation and manipulation utilities for DeterministicVector2F
+- [ ] Add movement methods to orchestration
+- [ ] Initial spec system
+- [x] Add attributes to entities
+- [ ] ~~Add sprite LODs~~ (Measurements reveal LODs are not needed)
 - [x] Add start scripts
 - [ ] Create initial Vector Render System
 - [x] Add Path2D JS interface
