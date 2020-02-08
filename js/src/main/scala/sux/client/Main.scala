@@ -31,7 +31,7 @@ object Main {
     webSocket.onerror = _ => println("[WS] Error")
     webSocket.onopen = _ => {
       println(f"[WS] Connected to server at ${serverAddress}")
-      webSocket.send(ClientActions.Serializer.toJson(ClientActions.Ping(Date.now().toLong)))
+      webSocket.send(ClientActions.Serializer.toJson(ClientActions.FullStateUpdate()))
     }
     webSocket.onclose = _ => println("[WS] Closed connection")
     webSocket.onmessage = event =>

@@ -9,7 +9,7 @@ import sux.client.debug.layers.{DebugBuildInfoRenderLayer, DebugSpacialRenderLay
 import sux.client.debug.{RenderStatistics, Timer}
 import sux.client.{Config, InterfaceState}
 import sux.client.rendering.extensions.ExtendedCanvasRenderingContext2D
-import sux.client.rendering.layers.{BackgroundGradientRenderLayer, BackgroundGridRenderLayer, RenderLayer}
+import sux.client.rendering.layers.{BackgroundGradientRenderLayer, BackgroundGridRenderLayer, EntitiesRenderLayer, RenderLayer}
 
 import scala.collection.mutable
 
@@ -19,6 +19,7 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
     canvas.getContext("2d").asInstanceOf[ExtendedCanvasRenderingContext2D],
     MutableVector2D(0.0, 0.0),
     MutableRectV2F(Vector2F(0f, 0f), Vector2F(0f, 0f)),
+    worldState,
     camera
   )
 
@@ -51,7 +52,8 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
     renderLayers += new BackgroundGridRenderLayer()
     renderLayers += new DebugSpacialRenderLayer()
     renderLayers += new DebugBuildInfoRenderLayer()
-    renderLayers += new DebugSpritesRenderLayer()
+//    renderLayers += new DebugSpritesRenderLayer()
+    renderLayers += new EntitiesRenderLayer()
   }
 
   private def setCanvasDimensions(): Unit = {
