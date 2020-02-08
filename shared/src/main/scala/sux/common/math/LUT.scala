@@ -10,7 +10,7 @@ import sux.common.utils.CollectionExtensions._
 protected class LUT[T](points: TreeMap[Long, T], interpolation: (Long, Long, T, T, Long) => T)(implicit classTag: ClassTag[T]) {
   private val keys = points.keys.toArray
   private val values = points.values.toArray
-  def lookup(x: Long): T = keys.search(x) match {
+  def lookup(t: Long): T = keys.search(t) match {
     case Found(foundIndex) => values(foundIndex)
     case InsertionPoint(insertionPoint) =>
       val lowerIndex = math.max(0, insertionPoint - 1)
@@ -19,7 +19,7 @@ protected class LUT[T](points: TreeMap[Long, T], interpolation: (Long, Long, T, 
       val upperKey = keys(upperIndex)
       val lowerValue = values(lowerIndex)
       val upperValue = values(upperIndex)
-      interpolation(lowerKey, upperKey, lowerValue, upperValue, x)
+      interpolation(lowerKey, upperKey, lowerValue, upperValue, t)
   }
 }
 
