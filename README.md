@@ -1,4 +1,7 @@
 ### What is ReSux?
+
+#### [Live Here](http://104.248.21.234:11100/)
+
 Project Resux is the latest iteration, as of Feb 2020, in a series of projects seeking to create an open source, modular, extendable and robust, online multiplayer Real Time Strategy (RTS) game. Since the project started as a simple experiment, the goal of the project has changed and developed over time.
 
 As it currently stands, the project has a few key points of ideology which it strives to follow, known as the 'Pillars of Development'.
