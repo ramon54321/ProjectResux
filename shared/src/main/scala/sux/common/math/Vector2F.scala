@@ -26,6 +26,9 @@ case class Vector2F(x: Float, y: Float) {
   def asVector2D(): Vector2D = {
     Vector2D(x.toDouble, y.toDouble)
   }
+  def asDeterministic(): DeterministicVector2F = {
+    DeterministicVector2F(LUTF(0L -> x), LUTF(0L -> y))
+  }
 }
 case class MutableVector2F(var x: Float, var y: Float) {
   def asImmutable(): Vector2F = {
@@ -33,6 +36,9 @@ case class MutableVector2F(var x: Float, var y: Float) {
   }
   def asVector2D(): Vector2D = {
     Vector2D(x.toDouble, y.toDouble)
+  }
+  def asDeterministic(): DeterministicVector2F = {
+    DeterministicVector2F(LUTF(0L -> x), LUTF(0L -> y))
   }
 }
 
