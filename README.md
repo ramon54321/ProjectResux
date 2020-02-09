@@ -70,6 +70,8 @@ As of `0.0.2` there is no automated release script yet. A release can be done th
 
 #### 0.0.2
 
+- [ ] Add movement methods to orchestration (Teleport, Move from A to B, Move from Current to B)
+- [ ] Initial spec system
 - [ ] Add server logger
 - [x] Add sprite rendering
 - [x] Entity Render Layer
@@ -77,9 +79,7 @@ As of `0.0.2` there is no automated release script yet. A release can be done th
 - [x] Performance Debug Statistics
 - [x] Layout server orchestration
 - [x] Add DeterministicVector2F
-- [ ] Add creation and manipulation utilities for DeterministicVector2F
-- [ ] Add movement methods to orchestration (Teleport, Move from A to B, Move from Current to B)
-- [ ] Initial spec system
+- [x] Add creation and manipulation utilities for DeterministicVector2F
 - [x] Add attributes to entities
 - [x] Add start scripts
 - [x] Add Path2D JS interface
