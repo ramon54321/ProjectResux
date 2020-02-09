@@ -53,6 +53,10 @@ As of `0.0.2` there is no automated release script yet. A release can be done th
 
 ### Todo
 
+#### Future
+
+- [ ] Static Sprite Caching over area with prerendering
+
 #### 0.0.3
 
 - [ ] Client mouse input
@@ -77,11 +81,11 @@ As of `0.0.2` there is no automated release script yet. A release can be done th
 - [ ] Add movement methods to orchestration (Teleport, Move from A to B, Move from Current to B)
 - [ ] Initial spec system
 - [x] Add attributes to entities
-- [ ] ~~Add sprite LODs~~ (Measurements reveal LODs are not needed)
 - [x] Add start scripts
-- [ ] ~~Create initial Vector Render System~~ (Sprites will suffice for now)
 - [x] Add Path2D JS interface
 - [x] Extend rendering context with Path2D
+- [ ] ~~Add sprite LODs~~ (Measurements reveal LODs are not needed)
+- [ ] ~~Create initial Vector Render System~~ (Sprites will suffice for now)
 - [ ] ~~Create release script to increment version and deploy~~
 
 #### 0.0.1
