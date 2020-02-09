@@ -30,4 +30,6 @@ object LUTF {
   val identity = LUTF(0L -> 0f, 1L -> 1f)
   val inverse = LUTF(0L -> 1f, 1L -> 0f)
   def apply(points: (Long, Float)*): LUTF = new LUTF(TreeMap(points:_*), Interpolation.interpolate)
+  def append(a: LUTF, b: LUTF): LUTF = LUTF((a.pointsSeq ++ b.pointsSeq):_*)
+  def extend(a: LUTF, b: LUTF): LUTF = LUTF((Seq(a.pointsSeq.last) ++ b.pointsSeq):_*)
 }

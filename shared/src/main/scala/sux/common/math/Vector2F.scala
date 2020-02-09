@@ -57,6 +57,9 @@ object DeterministicVector2F {
     val ys: Seq[(Long, Float)] = vectorPairs.map(pair => (pair._1, pair._2.y))
     DeterministicVector2F(LUTF(xs:_*), LUTF(ys:_*))
   }
+
+  def append(a: DeterministicVector2F, b: DeterministicVector2F): DeterministicVector2F = DeterministicVector2F(LUTF.append(a.x, b.x), LUTF.append(a.y, b.y))
+  def extend(a: DeterministicVector2F, b: DeterministicVector2F): DeterministicVector2F = DeterministicVector2F(LUTF.extend(a.x, b.x), LUTF.extend(a.y, b.y))
 }
 
 object Vector2F {
