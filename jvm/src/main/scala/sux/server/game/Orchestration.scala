@@ -26,8 +26,8 @@ object Orchestration {
       .foreach(health => Hub.patchWorldState(WorldActions.SetEntityAttributeFloat(id, "Health", health + amount)))
   }
 
-  def teleportEntity(id: String, position: Vec2F): Unit = {
-    Hub.patchWorldState(WorldActions.SetEntityPosition(id, position.asDeterministic().toSerializable))
+  def teleportEntity(id: String, to: Vec2F): Unit = {
+    Hub.patchWorldState(WorldActions.SetEntityPosition(id, to.asDeterministic().toSerializable))
   }
 
   def moveEntity(id: String, from: Vec2F, to: Vec2F): Unit = {
