@@ -72,6 +72,7 @@ As of `0.0.2` there is no automated release script yet. A release can be done th
 
 - [x] Add movement methods to orchestration (Teleport, Move from A to B, Move from Current to B)
 - [ ] Initial spec system
+- [ ] Add commit counter since last version
 - [ ] Add server logger
 - [x] Add sprite rendering
 - [x] Entity Render Layer
