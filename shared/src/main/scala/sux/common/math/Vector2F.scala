@@ -52,7 +52,11 @@ object DeterministicVector2F {
   def fromSerializable(serializable: Serializable): DeterministicVector2F =
     new DeterministicVector2F(LUTF(serializable("x"):_*), LUTF(serializable("y"):_*))
 
-  // TODO: Create from Seq of Vector2F with times
+  def apply(vectorPairs: (Long, Vector2F)*): DeterministicVector2F = {
+    val xs: Seq[(Long, Float)] = vectorPairs.map(pair => (pair._1, pair._2.x))
+    val ys: Seq[(Long, Float)] = vectorPairs.map(pair => (pair._1, pair._2.y))
+    new DeterministicVector2F(LUTF(xs:_*), LUTF(ys:_*))
+  }
 }
 
 object Vector2F {
