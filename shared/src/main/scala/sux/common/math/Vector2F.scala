@@ -50,12 +50,12 @@ case class DeterministicVector2F(private val x: LUTF, private val y: LUTF) exten
 object DeterministicVector2F {
   type Serializable = HashMap[String, Seq[(Long, Float)]]
   def fromSerializable(serializable: Serializable): DeterministicVector2F =
-    new DeterministicVector2F(LUTF(serializable("x"):_*), LUTF(serializable("y"):_*))
+    DeterministicVector2F(LUTF(serializable("x"):_*), LUTF(serializable("y"):_*))
 
   def apply(vectorPairs: (Long, Vector2F)*): DeterministicVector2F = {
     val xs: Seq[(Long, Float)] = vectorPairs.map(pair => (pair._1, pair._2.x))
     val ys: Seq[(Long, Float)] = vectorPairs.map(pair => (pair._1, pair._2.y))
-    new DeterministicVector2F(LUTF(xs:_*), LUTF(ys:_*))
+    DeterministicVector2F(LUTF(xs:_*), LUTF(ys:_*))
   }
 }
 
