@@ -70,7 +70,7 @@ As of `0.0.2` there is no automated release script yet. A release can be done th
 
 #### 0.0.2
 
-- [ ] Add movement methods to orchestration (Teleport, Move from A to B, Move from Current to B)
+- [x] Add movement methods to orchestration (Teleport, Move from A to B, Move from Current to B)
 - [ ] Initial spec system
 - [ ] Add server logger
 - [x] Add sprite rendering
