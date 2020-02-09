@@ -12,6 +12,24 @@ object Orchestration {
     Hub.patchWorldState(WorldActions.SetEntityAttributeString(id, "Name", "Alan P. Wilson"))
     Hub.patchWorldState(WorldActions.SetEntityAttributeInt(id, "Rank", 3))
     Hub.patchWorldState(WorldActions.SetEntityAttributeFloat(id, "Health", 100f))
+    Hub.patchWorldState(WorldActions.SetEntityAttributeFloat(id, "Munitions", 100f))
+  }
+
+  // TODO: Split into layers -> entityId or pure entity as parameter?
+
+  def shootEntity(idShooter: String, idTarget: String): Unit = {
+    for {
+      shooter <- Hub.worldState.getEntityById(idShooter)
+      target <- Hub.worldState.getEntityById(idTarget)
+      shooterMunitions <- shooter.getAttribute[Float]("Munitions")
+      targetHealth <- target.getAttribute[Float]("Health")
+      munitionUsage <- Some(21f)
+      damage <- Some(55f)
+    } yield {
+      Hub.patchWorldState(WorldActions.SetEntityAttributeFloat(shooter.id, "Munitions", shooterMunitions - munitionUsage))
+      // TODO: Use lower level damage method
+      Hub.patchWorldState(WorldActions.SetEntityAttributeFloat(target.id, "Health", targetHealth - damage))
+    }
   }
 
   def damageEntity(id: String, amount: Float): Unit = {
