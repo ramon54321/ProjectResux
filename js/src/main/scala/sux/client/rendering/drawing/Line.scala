@@ -2,10 +2,10 @@ package sux.client.rendering.drawing
 
 import sux.client.debug.RenderStatistics
 import sux.client.rendering.{DrawInfo, Mapping}
-import sux.common.math.Vector2F
+import sux.common.math.Vec2F
 
 object Line {
-  def drawLine(drawInfo: DrawInfo, worldStart: Vector2F, worldEnd: Vector2F): Unit = {
+  def drawLine(drawInfo: DrawInfo, worldStart: Vec2F, worldEnd: Vec2F): Unit = {
     val canvasStart = Mapping.worldSpaceToCanvasSpace(drawInfo, worldStart)
     val canvasEnd = Mapping.worldSpaceToCanvasSpace(drawInfo, worldEnd)
     drawInfo.context.beginPath()
@@ -15,7 +15,7 @@ object Line {
     RenderStatistics.drawLineCount += 1
   }
 
-  def drawPath(drawInfo: DrawInfo, worldPoints: List[Vector2F]): Unit = {
+  def drawPath(drawInfo: DrawInfo, worldPoints: List[Vec2F]): Unit = {
     if (worldPoints.size < 2) {
       return
     }

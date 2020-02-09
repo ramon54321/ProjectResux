@@ -3,12 +3,12 @@ package sux.client.rendering.drawing
 import sux.client.debug.RenderStatistics
 import sux.client.rendering.DrawInfo
 import sux.client.rendering.Mapping._
-import sux.common.math.{Rect, Vector2F}
+import sux.common.math.{Rect, Vec2F}
 
 import scala.math.Pi
 
 object Circle {
-  def drawCircle(drawInfo: DrawInfo, worldCenter: Vector2F, canvasRadius: Double, ignoreBounds: Boolean = false): Unit = {
+  def drawCircle(drawInfo: DrawInfo, worldCenter: Vec2F, canvasRadius: Double, ignoreBounds: Boolean = false): Unit = {
     if (!Rect.isInBounds(drawInfo.screenWorldRect, worldCenter) && !ignoreBounds) return
     val canvasCenter = worldSpaceToCanvasSpace(drawInfo, worldCenter)
     drawInfo.context.beginPath()
@@ -17,7 +17,7 @@ object Circle {
     RenderStatistics.drawCircleCount += 1
   }
 
-  def drawCircleFill(drawInfo: DrawInfo, worldCenter: Vector2F, canvasRadius: Double, ignoreBounds: Boolean = false): Unit = {
+  def drawCircleFill(drawInfo: DrawInfo, worldCenter: Vec2F, canvasRadius: Double, ignoreBounds: Boolean = false): Unit = {
     if (!Rect.isInBounds(drawInfo.screenWorldRect, worldCenter) && !ignoreBounds) return
     val canvasCenter = worldSpaceToCanvasSpace(drawInfo, worldCenter)
     drawInfo.context.beginPath()
@@ -26,7 +26,7 @@ object Circle {
     RenderStatistics.drawCircleCount += 1
   }
 
-  def drawArc(drawInfo: DrawInfo, worldCenter: Vector2F, worldRadius: Float, startAngle: Float, endAngle: Float): Unit = {
+  def drawArc(drawInfo: DrawInfo, worldCenter: Vec2F, worldRadius: Float, startAngle: Float, endAngle: Float): Unit = {
     if (!Rect.isInBounds(drawInfo.screenWorldRect, worldCenter)) return
     val canvasCenter = worldSpaceToCanvasSpace(drawInfo, worldCenter)
     val canvasRadius = worldSpaceToCanvasSpace(drawInfo, worldRadius)

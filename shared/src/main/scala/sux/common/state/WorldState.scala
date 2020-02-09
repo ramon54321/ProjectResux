@@ -1,11 +1,11 @@
 package sux.common.state
 
 import sux.common.actions.WorldActions._
-import sux.common.math.DeterministicVector2F
+import sux.common.math.DVec2F
 
 import scala.collection.mutable
 
-class Entity(val id: String, var position: DeterministicVector2F) {
+class Entity(val id: String, var position: DVec2F) {
   val attributes = new mutable.HashMap[String, Any]
   def setAttribute(name: String, value: Any): Unit = attributes.put(name, value)
   def getAttribute[T](name: String): Option[T] = attributes.get(name).asInstanceOf[Option[T]]
@@ -15,8 +15,8 @@ class WorldState {
   def patch(action: WorldAction): Unit = action match {
     case Signal(code) => println(s"Patching with Signal ${code}")
     case Ping(timestamp) => println(s"Patching with Ping $timestamp")
-    case SpawnEntity(id, positionSerializable) => entitiesById.put(id, new Entity(id, DeterministicVector2F.fromSerializable(positionSerializable)))
-    case SetEntityPosition(id, positionSerializable) => entitiesById(id).position = DeterministicVector2F.fromSerializable(positionSerializable)
+    case SpawnEntity(id, positionSerializable) => entitiesById.put(id, new Entity(id, DVec2F.fromSerializable(positionSerializable)))
+    case SetEntityPosition(id, positionSerializable) => entitiesById(id).position = DVec2F.fromSerializable(positionSerializable)
     case SetEntityAttributeString(id, name, value) => entitiesById(id).setAttribute(name, value)
     case SetEntityAttributeFloat(id, name, value) => entitiesById(id).setAttribute(name, value)
     case SetEntityAttributeInt(id, name, value) => entitiesById(id).setAttribute(name, value)

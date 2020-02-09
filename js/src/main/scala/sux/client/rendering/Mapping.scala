@@ -1,6 +1,6 @@
 package sux.client.rendering
 
-import sux.common.math.{MutableVector2D, Vector2D, Vector2F}
+import sux.common.math.{MVec2D, Vec2D, Vec2F}
 
 import scala.collection.immutable.HashMap
 import scala.util.Try
@@ -11,13 +11,13 @@ object Mapping {
    * Screen Space has the origin in the center and ranges from -1 to 1 from bottom to top corrected with the camera aspect ratio
    * World Space is the actual position of the entity from which logic is calculated
    */
-  def worldSpaceToCanvasSpace(drawInfo: DrawInfo, worldPoint: Vector2F): Vector2D = screenSpaceToCanvasSpace(drawInfo.canvasSize, worldSpaceToScreenSpace(drawInfo.camera, worldPoint))
+  def worldSpaceToCanvasSpace(drawInfo: DrawInfo, worldPoint: Vec2F): Vec2D = screenSpaceToCanvasSpace(drawInfo.canvasSize, worldSpaceToScreenSpace(drawInfo.camera, worldPoint))
   def worldSpaceToCanvasSpace(drawInfo: DrawInfo, worldValue: Float): Double = screenSpaceToCanvasSpace(drawInfo.canvasSize, worldSpaceToScreenSpace(drawInfo.camera, worldValue))
 
-  def canvasSpaceToWorldSpace(drawInfo: DrawInfo, canvasPoint: Vector2D): Vector2F = screenSpaceToWorldSpace(drawInfo.camera, canvasSpaceToScreenSpace(drawInfo.canvasSize, canvasPoint))
+  def canvasSpaceToWorldSpace(drawInfo: DrawInfo, canvasPoint: Vec2D): Vec2F = screenSpaceToWorldSpace(drawInfo.camera, canvasSpaceToScreenSpace(drawInfo.canvasSize, canvasPoint))
   def canvasSpaceToWorldSpace(drawInfo: DrawInfo, canvasValue: Double): Float = screenSpaceToWorldSpace(drawInfo.camera, canvasSpaceToScreenSpace(drawInfo.canvasSize, canvasValue))
 
-  private def worldSpaceToScreenSpace(camera: Camera, worldPoint: Vector2F): Vector2F = {
+  private def worldSpaceToScreenSpace(camera: Camera, worldPoint: Vec2F): Vec2F = {
     // worldSpace to translatedSpace
     val xTranslatedSpace = worldPoint.x - camera.panX
     val yTranslatedSpace = worldPoint.y - camera.panY
@@ -30,7 +30,7 @@ object Mapping {
     // scopeSpace to screenSpace
     val xScreenSpace = xScopeSpace / camera.aspectRatio
     val yScreenSpace = yScopeSpace
-    Vector2F(xScreenSpace, yScreenSpace)
+    Vec2F(xScreenSpace, yScreenSpace)
   }
 
   private def worldSpaceToScreenSpace(camera: Camera, worldValue: Float): Float = {
@@ -38,7 +38,7 @@ object Mapping {
   }
 
 
-  private def screenSpaceToWorldSpace(camera: Camera, screenPoint: Vector2F): Vector2F = {
+  private def screenSpaceToWorldSpace(camera: Camera, screenPoint: Vec2F): Vec2F = {
     // screenSpace to scopeSpace
     val xScopeSpace = screenPoint.x * camera.aspectRatio
     val yScopeSpace = screenPoint.y
@@ -52,7 +52,7 @@ object Mapping {
     val xWorldSpace = xTranslatedSpace + camera.panX
     val yWorldSpace = yTranslatedSpace + camera.panY
 
-    Vector2F(xWorldSpace, yWorldSpace)
+    Vec2F(xWorldSpace, yWorldSpace)
   }
 
   private def screenSpaceToWorldSpace(camera: Camera, screenValue: Float): Float = {
@@ -60,24 +60,24 @@ object Mapping {
   }
 
 
-  private def screenSpaceToCanvasSpace(canvasSize: MutableVector2D, screenPoint: Vector2F): Vector2D = {
+  private def screenSpaceToCanvasSpace(canvasSize: MVec2D, screenPoint: Vec2F): Vec2D = {
     val x = (screenPoint.x * canvasSize.x / 2) + canvasSize.x / 2
     val y = (screenPoint.y * -canvasSize.y / 2) + canvasSize.y / 2
-    Vector2D(x, y)
+    Vec2D(x, y)
   }
 
-  private def screenSpaceToCanvasSpace(canvasSize: MutableVector2D, screenValue: Float): Double = {
+  private def screenSpaceToCanvasSpace(canvasSize: MVec2D, screenValue: Float): Double = {
     screenValue.toDouble
   }
 
 
-  private def canvasSpaceToScreenSpace(canvasSize: MutableVector2D, canvasPoint: Vector2D): Vector2F = {
+  private def canvasSpaceToScreenSpace(canvasSize: MVec2D, canvasPoint: Vec2D): Vec2F = {
     val x = (canvasPoint.x - canvasSize.x / 2) * 2 / canvasSize.x
     val y = (canvasPoint.y - canvasSize.y / 2) * 2 / -canvasSize.y
-    Vector2F(x.toFloat, y.toFloat)
+    Vec2F(x.toFloat, y.toFloat)
   }
 
-  private def canvasSpaceToScreenSpace(canvasSize: MutableVector2D, canvasValue: Double): Float = {
+  private def canvasSpaceToScreenSpace(canvasSize: MVec2D, canvasValue: Double): Float = {
     canvasValue.toFloat
   }
 

@@ -4,7 +4,7 @@ import sux.client.debug.Timer
 import sux.client.rendering.drawing.Sprite
 import sux.client.rendering.layers.RenderLayer
 import sux.client.rendering.{DrawInfo, Sprite}
-import sux.common.math.Vector2F
+import sux.common.math.Vec2F
 
 class DebugSpritesRenderLayer extends RenderLayer {
   val timerSprites = new Timer("Debug Sprites")
@@ -14,7 +14,7 @@ class DebugSpritesRenderLayer extends RenderLayer {
     timerSprites.markStart()
 
     Range(0, 1500)
-          .foreach(_ => Sprite.drawSprite(drawInfo, mySprite, Vector2F(math.random().toFloat * 100f, math.random().toFloat * 100f), math.random().toFloat * math.Pi.toFloat * 2, 2f))
+          .foreach(_ => Sprite.drawSprite(drawInfo, mySprite, Vec2F(math.random().toFloat * 100f, math.random().toFloat * 100f), math.random().toFloat * math.Pi.toFloat * 2, 2f))
 
     timerSprites.markEnd()
   }

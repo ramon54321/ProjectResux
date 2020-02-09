@@ -3,11 +3,11 @@ package sux.client.rendering.drawing
 import sux.client.debug.RenderStatistics
 import sux.client.rendering.Mapping.worldSpaceToCanvasSpace
 import sux.client.rendering.{DrawInfo, Sprite}
-import sux.common.math.Vector2F
+import sux.common.math.Vec2F
 import sux.common.math.Rect
 
 object Sprite {
-  def drawSprite(drawInfo: DrawInfo, sprite: Sprite, worldCenter: Vector2F, rotation: Float, scale: Float): Unit = {
+  def drawSprite(drawInfo: DrawInfo, sprite: Sprite, worldCenter: Vec2F, rotation: Float, scale: Float): Unit = {
     if (!Rect.isInBounds(drawInfo.screenWorldRect, worldCenter)) return
     val spriteScale = drawInfo.camera.scale * scale
     val canvasCenter = worldSpaceToCanvasSpace(drawInfo, worldCenter)
