@@ -62,6 +62,7 @@ As of `0.0.2` there is no automated release script yet. A release can be done th
 - [ ] Client mouse input
 - [ ] Click to select
 - [ ] Right click to move
+- [ ] Context Menu
 - [ ] Initial path system (Move concatenation, not path-finding)
 
 ###### Optimizations
@@ -110,6 +111,18 @@ Initial Canvas Debug Renderer, Input Handler, Camera, Action Serialization and D
 - [ ] ~~Pipeline tool~~
 
 ### Proposals
+
+#### Context Menu
+
+In order to keep the client highly flexible and remove the need for a fixed menu design, it may be more feasible to use a context menu of sorts. This will mean the actions the player can take is dependent on the context of the interaction, namely, the left or right click.
+
+##### Advantages
+
+In theory, this method would mean the menu can be changed very easily, as the UI can be procedurally generated based on a backing action tree. In order to change the menu, just the backing tree needs to change, and no consideration needs to be given to the display of the menu as it is handled by the context menu system itself.
+
+##### Backing Action Tree
+
+The menu will be constructed from a tree containing nodes, each node contains either an action or a sub tree for each possible action, in this case left click and right click. Perhaps it can be simplified to assume the only possible action is a left click and any additional functionality is done through the use of sub tree nodes.
 
 #### Vector Render System
 
