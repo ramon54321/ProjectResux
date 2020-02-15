@@ -3,7 +3,7 @@ package sux.client.rendering.drawing
 import sux.client.debug.RenderStatistics
 import sux.client.rendering.DrawInfo
 import sux.client.rendering.Mapping._
-import sux.common.math.{Rect, Vec2F}
+import sux.common.math.{Rect, Vec2D, Vec2F}
 
 import scala.math.Pi
 
@@ -20,6 +20,13 @@ object Circle {
   def drawCircleFill(drawInfo: DrawInfo, worldCenter: Vec2F, canvasRadius: Double, ignoreBounds: Boolean = false): Unit = {
     if (!Rect.isInBounds(drawInfo.screenWorldRect, worldCenter) && !ignoreBounds) return
     val canvasCenter = worldSpaceToCanvasSpace(drawInfo, worldCenter)
+    drawInfo.context.beginPath()
+    drawInfo.context.arc(canvasCenter.x, canvasCenter.y, canvasRadius, 0.0, Pi * 2)
+    drawInfo.context.fill()
+    RenderStatistics.drawCircleCount += 1
+  }
+
+  def drawCircleFillCanvasSpace(drawInfo: DrawInfo, canvasCenter: Vec2D, canvasRadius: Double): Unit = {
     drawInfo.context.beginPath()
     drawInfo.context.arc(canvasCenter.x, canvasCenter.y, canvasRadius, 0.0, Pi * 2)
     drawInfo.context.fill()
