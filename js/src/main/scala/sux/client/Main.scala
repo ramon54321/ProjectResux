@@ -1,46 +1,34 @@
 package sux.client
 
 import org.scalajs.dom.raw.WebSocket
-import scala.scalajs.js.Date
 import sux.client.rendering.{Camera, CanvasRenderer}
 import sux.common.actions.{ClientActions, WorldActions}
-import sux.common.actions.WorldActions.WorldAction
-import sux.common.state.WorldState
 
 object Main {
 
-  def handleWorldAction(worldState: WorldState, worldAction: WorldAction): Unit = {
-    worldState.patch(worldAction)
-  }
-
   def main(args: Array[String]): Unit = {
-
     println(f"[Main] Using ${Config.label} config")
-
-    /**
-     * Initialize Data Structures
-     */
-    val worldState = new WorldState
 
     /**
      * Connect to Server
      */
     val serverAddress = f"ws://${Config.serverHost}:${Config.serverPort}"
     println(s"[Main] Connecting to server at ${serverAddress}")
-    val webSocket = new WebSocket(serverAddress)
-    webSocket.onerror = _ => println("[WS] Error")
-    webSocket.onopen = _ => {
+    Hub.webSocket = new WebSocket(serverAddress)
+    Hub.webSocket.onerror = _ => println("[WS] Error")
+    Hub.webSocket.onopen = _ => {
       println(f"[WS] Connected to server at ${serverAddress}")
-      webSocket.send(ClientActions.Serializer.toJson(ClientActions.FullStateUpdate()))
+      Hub.dispatch(ClientActions.FullStateUpdate())
     }
-    webSocket.onclose = _ => println("[WS] Closed connection")
-    webSocket.onmessage = event =>
+    Hub.webSocket.onclose = _ => println("[WS] Closed connection")
+    Hub.webSocket.onmessage = event =>
       WorldActions.Serializer.fromJson(event.data.asInstanceOf[String])
-        .map(handleWorldAction(worldState, _))
+        .map(Hub.handleWorldAction)
+
 
     /**
      * Setup Renderer
      */
-    val renderer = new CanvasRenderer(worldState, new Camera())
+    val renderer = new CanvasRenderer(Hub.worldState, new Camera())
   }
 }
