@@ -1,6 +1,8 @@
 package sux.client
 
+import sux.client.InterfaceState.contextMenu
 import sux.common.math.{MVec2D, Vec2D}
+import sux.common.state.Entity
 
 import scala.collection.mutable
 import scala.util.Try
@@ -43,17 +45,29 @@ object InterfaceState {
   def setClickRight(): Unit = {
     clicks("right") = true
   }
+  def getClickLeft: Boolean = Try(clicks("left")).getOrElse(false)
+  def getClickRight: Boolean = Try(clicks("right")).getOrElse(false)
 
   // Context Menu
-  private var contextMenuNode: Option[ContextMenuNode] = None
-  private var contextMenuCanvasCenter: Vec2D = Vec2D(0, 0)
+  private var isContextMenuOpen: Boolean = false
+  def openContextMenu(): Unit = isContextMenuOpen = true
+  def closeContextMenu(): Unit = isContextMenuOpen = false
+  def getIsContextMenuOpen: Boolean = isContextMenuOpen
+  private var contextMenu: Either[String, ContextMenuNode] = Left("No Root Node")
+  def getContextMenu: Either[String, ContextMenuNode] = contextMenu
+  def setContextMenu(contextMenu: Either[String, ContextMenuNode]): Unit = this.contextMenu = contextMenu
+  def clearContextMenuNode(): Unit = contextMenu = Left("Cleared Root Node")
   private var contextMenuHoverNode: Option[ContextMenuNode] = None
-  def getContextMenuNode: Option[ContextMenuNode] = contextMenuNode
-  def setContextMenuNode(node: ContextMenuNode): Unit = contextMenuNode = Some(node)
-  def clearContextMenuNode(): Unit = contextMenuNode = None
   def getContextMenuHoverNode: Option[ContextMenuNode] = contextMenuHoverNode
   def setContextMenuHoverNode(node: ContextMenuNode): Unit = contextMenuHoverNode = Some(node)
   def clearContextMenuHoverNode(): Unit = contextMenuHoverNode = None
+  private var contextMenuCanvasCenter: Vec2D = Vec2D(0, 0)
   def getContextMenuCanvasCenter: Vec2D = contextMenuCanvasCenter
   def setContextMenuCanvasCenter(canvasCenter: Vec2D): Unit = contextMenuCanvasCenter = canvasCenter
+
+  // Selection
+  private var selectedEntity: Option[Entity] = None
+  def getSelectedEntity: Option[Entity] = selectedEntity
+  def setSelectedEntity(entity: Entity): Unit = selectedEntity = Some(entity)
+  def clearSelectedEntity(): Unit = selectedEntity = None
 }

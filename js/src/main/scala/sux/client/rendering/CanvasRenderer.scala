@@ -5,11 +5,11 @@ import sux.common.math.{MVec2D, MutableRectV2F, Vec2D, Vec2F}
 import sux.common.state.WorldState
 import org.scalajs.dom.{document, window}
 import org.scalajs.dom.raw.{HTMLCanvasElement, UIEvent}
-import sux.client
-import sux.client.InterfaceState.{clearContextMenuHoverNode, clearContextMenuNode, contextMenuHoverNode, contextMenuNode}
-import sux.client.debug.layers.{DebugBuildInfoRenderLayer, DebugSpacialRenderLayer, DebugSpritesRenderLayer}
+import sux.client.InterfaceState.{clearContextMenuHoverNode, clearContextMenuNode, getMouseCanvasPosition}
+import sux.client.debug.layers.{DebugBuildInfoRenderLayer, DebugSpacialRenderLayer}
 import sux.client.debug.{RenderStatistics, Timer}
-import sux.client.{Config, ContextMenuNode, InterfaceState}
+import sux.client.gameplay.ContextMenu
+import sux.client.{Config, InterfaceState}
 import sux.client.rendering.extensions.ExtendedCanvasRenderingContext2D
 import sux.client.rendering.layers.{BackgroundGradientRenderLayer, BackgroundGridRenderLayer, ContextMenuRenderLayer, EntitiesRenderLayer, RenderLayer}
 
@@ -104,30 +104,25 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
     }
 
     if (InterfaceState.getKeyDown("f")) {
-      if (InterfaceState.getContextMenuNode.nonEmpty) InterfaceState.clearContextMenuNode()
+      if (InterfaceState.getIsContextMenuOpen) InterfaceState.closeContextMenu()
       else {
-        InterfaceState.setContextMenuCanvasCenter(InterfaceState.getMouseCanvasPosition.asImmutable())
-        InterfaceState.setContextMenuNode(new ContextMenuNode("Root", Seq(
-          new ContextMenuNode("Move"),
-          new ContextMenuNode("Build", Seq(
-            new ContextMenuNode("Rally Point"),
-            new ContextMenuNode("Sandbags"),
-            new ContextMenuNode("Barbed Wire")
-          )),
-          new ContextMenuNode("Attack")
-        )))
+        InterfaceState.setContextMenu(ContextMenu.getContextMenu)
+        InterfaceState.setContextMenuCanvasCenter(getMouseCanvasPosition.asImmutable())
+        InterfaceState.openContextMenu()
       }
     }
 
     // Mouse
-    InterfaceState.getContextMenuHoverNode.foreach(hoverNode => {
-      if (hoverNode.children.nonEmpty) InterfaceState.setContextMenuNode(hoverNode)
-      else {
-        println(hoverNode.name)
-        clearContextMenuNode()
-        clearContextMenuHoverNode()
-      }
-    })
+    if (InterfaceState.getClickLeft) {
+      InterfaceState.getContextMenuHoverNode.foreach(hoverNode => {
+        if (hoverNode.children.nonEmpty) InterfaceState.setContextMenu(Right(hoverNode))
+        else {
+          println(hoverNode.name)
+          clearContextMenuNode()
+          clearContextMenuHoverNode()
+        }
+      })
+    }
 
     // Late Update (After Input)
     val lateSquareScope = drawInfo.camera.scope * drawInfo.camera.scope
