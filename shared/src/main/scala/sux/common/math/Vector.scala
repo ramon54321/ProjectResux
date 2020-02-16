@@ -10,6 +10,10 @@ case class Vec2D(x: Double, y: Double) {
   def asVector2F(): Vec2F = {
     Vec2F(x.toFloat, y.toFloat)
   }
+
+  def +(b: Vec2D): Vec2D = {
+    Vec2D(x + b.x, y + b.y)
+  }
 }
 case class MVec2D(var x: Double, var y: Double) {
   def asImmutable(): Vec2D = {
@@ -17,6 +21,10 @@ case class MVec2D(var x: Double, var y: Double) {
   }
   def asVector2F(): Vec2F = {
     Vec2F(x.toFloat, y.toFloat)
+  }
+
+  def +(b: MVec2D): Vec2D = {
+    Vec2D(x + b.x, y + b.y)
   }
 }
 case class Vec2F(x: Float, y: Float) {

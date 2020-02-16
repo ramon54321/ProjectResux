@@ -1,15 +1,17 @@
 package sux.client.rendering
 
 import sux.client.utils.Browser
-import sux.common.math.{MutableRectV2F, MVec2D, Vec2D, Vec2F}
+import sux.common.math.{MVec2D, MutableRectV2F, Vec2D, Vec2F}
 import sux.common.state.WorldState
 import org.scalajs.dom.{document, window}
 import org.scalajs.dom.raw.{HTMLCanvasElement, UIEvent}
+import sux.client
+import sux.client.InterfaceState.{clearContextMenuHoverNode, clearContextMenuNode, contextMenuHoverNode, contextMenuNode}
 import sux.client.debug.layers.{DebugBuildInfoRenderLayer, DebugSpacialRenderLayer, DebugSpritesRenderLayer}
 import sux.client.debug.{RenderStatistics, Timer}
-import sux.client.{Config, InterfaceState}
+import sux.client.{Config, ContextMenuNode, InterfaceState}
 import sux.client.rendering.extensions.ExtendedCanvasRenderingContext2D
-import sux.client.rendering.layers.{BackgroundGradientRenderLayer, BackgroundGridRenderLayer, EntitiesRenderLayer, RenderLayer}
+import sux.client.rendering.layers.{BackgroundGradientRenderLayer, BackgroundGridRenderLayer, ContextMenuRenderLayer, EntitiesRenderLayer, RenderLayer}
 
 import scala.collection.mutable
 
@@ -43,6 +45,8 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
   }
   document.onkeydown = key => InterfaceState.setKeyDown(Mapping.mapKeyCodeToKey(key.keyCode))
   document.onkeyup = key => InterfaceState.setKeyUp(Mapping.mapKeyCodeToKey(key.keyCode))
+  document.onmousemove = mouse => InterfaceState.setMouseCanvasPosition(mouse.clientX, mouse.clientY)
+  document.onmousedown = _ => InterfaceState.setClickLeft()
 
   // Start Draw
   draw(drawInfo)
@@ -54,6 +58,7 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
     renderLayers += new DebugBuildInfoRenderLayer()
 //    renderLayers += new DebugSpritesRenderLayer()
     renderLayers += new EntitiesRenderLayer()
+    renderLayers += new ContextMenuRenderLayer()
   }
 
   private def setCanvasDimensions(): Unit = {
@@ -77,6 +82,7 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
   private def update(): Unit = {
     RenderStatistics.reset()
 
+    // Keys
     val squareScope = drawInfo.camera.scope * drawInfo.camera.scope
     if (InterfaceState.getKey("q") && squareScope < camera.scopeSquareMax) {
       drawInfo.camera.scope += camera.scopeRate
@@ -97,11 +103,41 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
       drawInfo.camera.panY -= camera.panRate * squareScope
     }
 
-    // After Camera Update
+    if (InterfaceState.getKeyDown("f")) {
+      if (InterfaceState.getContextMenuNode.nonEmpty) InterfaceState.clearContextMenuNode()
+      else {
+        InterfaceState.setContextMenuCanvasCenter(InterfaceState.getMouseCanvasPosition.asImmutable())
+        InterfaceState.setContextMenuNode(new ContextMenuNode("Root", Seq(
+          new ContextMenuNode("Move"),
+          new ContextMenuNode("Build", Seq(
+            new ContextMenuNode("Rally Point"),
+            new ContextMenuNode("Sandbags"),
+            new ContextMenuNode("Barbed Wire")
+          )),
+          new ContextMenuNode("Attack")
+        )))
+      }
+    }
+
+    // Mouse
+    InterfaceState.getContextMenuHoverNode.foreach(hoverNode => {
+      if (hoverNode.children.nonEmpty) InterfaceState.setContextMenuNode(hoverNode)
+      else {
+        println(hoverNode.name)
+        clearContextMenuNode()
+        clearContextMenuHoverNode()
+      }
+    })
+
+    // Late Update (After Input)
     val lateSquareScope = drawInfo.camera.scope * drawInfo.camera.scope
     drawInfo.camera.scale = (500 / Config.spritePixelsPerMeter) / lateSquareScope
     drawInfo.screenWorldRect.topLeft = Mapping.canvasSpaceToWorldSpace(drawInfo, Vec2D(0.0, 0.0))
     drawInfo.screenWorldRect.bottomRight = Mapping.canvasSpaceToWorldSpace(drawInfo, Vec2D(drawInfo.canvasSize.x, drawInfo.canvasSize.y))
+
+    // Reset Keys
+    InterfaceState.resetKeys()
+    InterfaceState.resetMouse()
   }
 
   private def clear(): Unit = {
