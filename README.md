@@ -59,11 +59,11 @@ As of `0.0.2` there is no automated release script yet. A release can be done th
 
 #### 0.0.3
 
-- [ ] Client mouse input
 - [ ] Click to select
-- [ ] Right click to move
-- [ ] Context Menu
 - [ ] Initial path system (Move concatenation, not path-finding)
+- [x] Client mouse input
+- [x] Context Menu
+- [ ] ~~Right click to move~~ (Replaced by context menu)
 
 ###### Optimizations
 
@@ -71,10 +71,10 @@ As of `0.0.2` there is no automated release script yet. A release can be done th
 
 #### 0.0.2
 
-- [x] Add movement methods to orchestration (Teleport, Move from A to B, Move from Current to B)
 - [ ] Initial spec system
 - [ ] Add commit counter since last version
 - [ ] Add server logger
+- [x] Add movement methods to orchestration (Teleport, Move from A to B, Move from Current to B)
 - [x] Add sprite rendering
 - [x] Entity Render Layer
 - [x] Performance Debug Timer
