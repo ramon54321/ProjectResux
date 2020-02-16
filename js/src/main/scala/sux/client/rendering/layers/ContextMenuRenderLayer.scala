@@ -1,6 +1,6 @@
 package sux.client.rendering.layers
 
-import sux.client.{ContextMenuNode, InterfaceState}
+import sux.client.InterfaceState
 import sux.client.debug.Timer
 import sux.client.rendering.DrawInfo
 import sux.client.rendering.drawing.{Circle, Text}
