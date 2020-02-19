@@ -22,6 +22,7 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
     MVec2D(0.0, 0.0),
     MutableRectV2F(Vec2F(0f, 0f), Vec2F(0f, 0f)),
     worldState,
+    0L,
     camera
   )
 
@@ -82,6 +83,9 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
   private def update(): Unit = {
     RenderStatistics.reset()
 
+    // Global Time
+    drawInfo.worldTime = System.currentTimeMillis()
+
     // Keys
     val squareScope = drawInfo.camera.scope * drawInfo.camera.scope
     if (InterfaceState.getKey("q") && squareScope < camera.scopeSquareMax) {
@@ -114,14 +118,20 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
 
     // Mouse
     if (InterfaceState.getClickLeft) {
-      InterfaceState.getContextMenuHoverNode.foreach(hoverNode => {
+      val contextMenuHover = InterfaceState.getContextMenuHoverNode
+      if (contextMenuHover.isDefined) {
+        val hoverNode = contextMenuHover.get
         if (hoverNode.children.nonEmpty) InterfaceState.setContextMenu(Right(hoverNode))
         else {
           println(hoverNode.name)
-          clearContextMenuNode()
-          clearContextMenuHoverNode()
+          InterfaceState.closeContextMenu()
+          InterfaceState.clearContextMenuNode()
+          InterfaceState.clearContextMenuHoverNode()
         }
-      })
+      } else {
+        val nearestEntity = drawInfo.worldState.getEntityByNearest(Mapping.canvasSpaceToWorldSpace(drawInfo, InterfaceState.getMouseCanvasPosition.asImmutable()), drawInfo.worldTime)
+        nearestEntity.foreach(InterfaceState.setSelectedEntity)
+      }
     }
 
     // Late Update (After Input)

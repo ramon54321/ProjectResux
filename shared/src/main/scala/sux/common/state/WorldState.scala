@@ -1,7 +1,7 @@
 package sux.common.state
 
 import sux.common.actions.WorldActions._
-import sux.common.math.DVec2F
+import sux.common.math.{DVec2F, Vec2F}
 
 import scala.collection.mutable
 
@@ -27,4 +27,17 @@ class WorldState {
   def entities: Iterable[Entity] = entitiesById.values
 
   def getEntityById(id: String): Option[Entity] = entitiesById.get(id)
+  def getEntityByNearest(position: Vec2F, t: Long): Option[Entity] = {
+    if (entities.isEmpty) return None
+    var currentNearestDistance = Float.MaxValue
+    var currentNearestEntity: Entity = entities.head
+    entities.foreach(entity => {
+      val distance = Vec2F.squareDistance(position, entity.position.lookup(t))
+      if (distance < currentNearestDistance) {
+        currentNearestEntity = entity
+        currentNearestDistance = distance
+      }
+    })
+    Some(currentNearestEntity)
+  }
 }

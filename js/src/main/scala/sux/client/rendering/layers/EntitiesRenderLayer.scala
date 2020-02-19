@@ -12,11 +12,9 @@ class EntitiesRenderLayer extends RenderLayer {
   override def draw(drawInfo: DrawInfo) {
     timer.markStart()
 
-    val now = System.currentTimeMillis()
-
     drawInfo.context.fillStyle = "rgba(255, 255, 255, 1.0)"
     drawInfo.worldState.entities.foreach(entity => {
-      val position = entity.position.lookup(now)
+      val position = entity.position.lookup(drawInfo.worldTime)
       Circle.drawCircleFill(drawInfo, position, 3f)
       entity.attributes.zipWithIndex.foreach(zip => {
         val key = zip._1._1
