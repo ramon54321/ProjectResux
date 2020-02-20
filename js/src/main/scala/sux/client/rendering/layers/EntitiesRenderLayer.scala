@@ -1,5 +1,6 @@
 package sux.client.rendering.layers
 
+import sux.client.InterfaceState
 import sux.client.debug.Timer
 import sux.client.rendering.DrawInfo
 import sux.client.rendering.drawing.{Circle, Text}
@@ -13,6 +14,8 @@ class EntitiesRenderLayer extends RenderLayer {
     timer.markStart()
 
     drawInfo.context.fillStyle = "rgba(255, 255, 255, 1.0)"
+    drawInfo.context.strokeStyle = "rgba(255, 255, 255, 1.0)"
+    drawInfo.context.lineWidth = 2.0
     drawInfo.worldState.entities.foreach(entity => {
       val position = entity.position.lookup(drawInfo.worldTime)
       Circle.drawCircleFill(drawInfo, position, 3f)
@@ -23,6 +26,7 @@ class EntitiesRenderLayer extends RenderLayer {
         Text.drawText(drawInfo, position, Vec2D(10.0, index * 14.0), f"${key}: ${value}")
       })
     })
+    InterfaceState.getSelectedEntity.foreach(entity => Circle.drawCircle(drawInfo, entity.position.lookup(drawInfo.worldTime), 10f))
 
     timer.markEnd()
   }

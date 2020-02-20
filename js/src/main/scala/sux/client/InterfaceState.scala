@@ -1,6 +1,5 @@
 package sux.client
 
-import sux.client.InterfaceState.contextMenu
 import sux.common.math.{MVec2D, Vec2D}
 import sux.common.state.Entity
 
@@ -69,5 +68,18 @@ object InterfaceState {
   private var selectedEntity: Option[Entity] = None
   def getSelectedEntity: Option[Entity] = selectedEntity
   def setSelectedEntity(entity: Entity): Unit = selectedEntity = Some(entity)
-  def clearSelectedEntity(): Unit = selectedEntity = None
+  def clearSelectedEntity(): Unit = {
+    selectedEntity = None
+    closeContextMenu()
+  }
+
+  // Hover
+  private var nearestHoverEntity: Option[Entity] = None
+  def getNearestHoverEntity: Option[Entity] = nearestHoverEntity
+  def setNearestHoverEntity(entity: Entity): Unit = nearestHoverEntity = Some(entity)
+  def clearNearestHoverEntity(): Unit = nearestHoverEntity = None
+  private var hoverEntity: Option[Entity] = None
+  def getHoverEntity: Option[Entity] = hoverEntity
+  def setHoverEntity(entity: Entity): Unit = hoverEntity = Some(entity)
+  def clearHoverEntity(): Unit = hoverEntity = None
 }

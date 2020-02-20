@@ -83,8 +83,19 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
   private def update(): Unit = {
     RenderStatistics.reset()
 
-    // Global Time
+    // Global Perframe Calculations
     drawInfo.worldTime = System.currentTimeMillis()
+    drawInfo.worldState.getEntityByNearest(Mapping.canvasSpaceToWorldSpace(
+      drawInfo, InterfaceState.getMouseCanvasPosition.asImmutable()), drawInfo.worldTime) match {
+      case Some(entity) =>
+        InterfaceState.setNearestHoverEntity(entity)
+        val distance = Vec2F.distance(InterfaceState.getMouseCanvasPosition.asVector2F(), Mapping.worldSpaceToCanvasSpace(drawInfo, entity.position.lookup(drawInfo.worldTime)).asVector2F())
+        if (distance < Config.hoverRadius) InterfaceState.setHoverEntity(entity)
+        else InterfaceState.clearHoverEntity()
+      case None =>
+        InterfaceState.clearNearestHoverEntity()
+        InterfaceState.clearHoverEntity()
+    }
 
     // Keys
     val squareScope = drawInfo.camera.scope * drawInfo.camera.scope
@@ -129,8 +140,10 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
           InterfaceState.clearContextMenuHoverNode()
         }
       } else {
-        val nearestEntity = drawInfo.worldState.getEntityByNearest(Mapping.canvasSpaceToWorldSpace(drawInfo, InterfaceState.getMouseCanvasPosition.asImmutable()), drawInfo.worldTime)
-        nearestEntity.foreach(InterfaceState.setSelectedEntity)
+        InterfaceState.getHoverEntity match {
+          case Some(entity) => InterfaceState.setSelectedEntity(entity)
+          case None => InterfaceState.clearSelectedEntity()
+        }
       }
     }
 

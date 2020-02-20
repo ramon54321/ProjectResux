@@ -14,6 +14,7 @@ object Config {
   val buildDate: String = init("buildDate").getOrElse("Unknown").asInstanceOf[String]
   val serverHost: String = init("serverHost").getOrElse("localhost").asInstanceOf[String]
   val serverPort: Int = init("serverPort").getOrElse(8080).asInstanceOf[Int]
+  val hoverRadius: Float = init("hoverRadius").getOrElse(10f).asInstanceOf[Float]
 
   val spriteLodCount: Int = init("spriteLodCount").getOrElse(5).asInstanceOf[Int]
   val spriteLodBias: Float = init("spriteLodBias").getOrElse(1.5f).asInstanceOf[Float]
