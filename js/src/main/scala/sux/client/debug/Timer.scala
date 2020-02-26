@@ -4,7 +4,7 @@ import org.scalajs.dom.window
 
 import scala.collection.mutable
 
-class Timer(val name: String, val reportInterval: Int = 120) {
+class Timer(val name: String, val reportInterval: Int = 1200) {
   private val measure = s"${name}_measure"
   private val startMark = s"${name}_start"
   private val endMark = s"${name}_end"

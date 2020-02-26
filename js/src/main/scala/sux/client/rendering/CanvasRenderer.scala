@@ -133,7 +133,7 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
     val hoverEntity = InterfaceState.getHoverEntity
     if (InterfaceState.getClickLeft) {
       if (hoverNode.isDefined) InterfaceOrchestration.clickNode(frameInfo, hoverNode.get)
-      else if (hoverEntity.isDefined) InterfaceOrchestration.clickEntity(hoverEntity.get)
+      else if (hoverEntity.isDefined) InterfaceOrchestration.clickEntity(frameInfo, hoverEntity.get)
       else InterfaceOrchestration.deselectAll()
     }
 
@@ -155,7 +155,7 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
   private def draw(frameInfo: FrameInfo): Unit = {
     window.requestAnimationFrame((_: Double) => draw(frameInfo))
     frameCounter += 1
-    if (frameCounter % 120 == 0) slowUpdate()
+    if (frameCounter % 1200 == 0) slowUpdate()
 
     // Update
     updateTimer.markStart()
