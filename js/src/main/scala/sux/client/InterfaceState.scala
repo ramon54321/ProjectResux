@@ -55,11 +55,11 @@ object InterfaceState {
   private var contextMenu: Either[String, ContextMenuNode] = Left("No Root Node")
   def getContextMenu: Either[String, ContextMenuNode] = contextMenu
   def setContextMenu(contextMenu: Either[String, ContextMenuNode]): Unit = this.contextMenu = contextMenu
-  def clearContextMenuNode(): Unit = contextMenu = Left("Cleared Root Node")
-  private var contextMenuHoverNode: Option[ContextMenuNode] = None
-  def getContextMenuHoverNode: Option[ContextMenuNode] = contextMenuHoverNode
-  def setContextMenuHoverNode(node: ContextMenuNode): Unit = contextMenuHoverNode = Some(node)
-  def clearContextMenuHoverNode(): Unit = contextMenuHoverNode = None
+  def clearContextMenu(): Unit = contextMenu = Left("Cleared Root Node")
+  private var hoverNode: Option[ContextMenuNode] = None
+  def getHoverNode: Option[ContextMenuNode] = hoverNode
+  def setHoverNode(node: ContextMenuNode): Unit = hoverNode = Some(node)
+  def clearHoverNode(): Unit = hoverNode = None
   private var contextMenuCanvasCenter: Vec2D = Vec2D(0, 0)
   def getContextMenuCanvasCenter: Vec2D = contextMenuCanvasCenter
   def setContextMenuCanvasCenter(canvasCenter: Vec2D): Unit = contextMenuCanvasCenter = canvasCenter

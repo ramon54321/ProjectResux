@@ -5,13 +5,14 @@ import sux.common.math.{MVec2D, MutableRectV2F, Vec2D, Vec2F}
 import sux.common.state.WorldState
 import org.scalajs.dom.{document, window}
 import org.scalajs.dom.raw.{HTMLCanvasElement, UIEvent}
-import sux.client.InterfaceState.{clearContextMenuHoverNode, clearContextMenuNode, getMouseCanvasPosition}
+import sux.client.InterfaceState.{clearHoverNode, clearContextMenu, getMouseCanvasPosition}
 import sux.client.debug.layers.{DebugBuildInfoRenderLayer, DebugSpacialRenderLayer}
 import sux.client.debug.{RenderStatistics, Timer}
 import sux.client.gameplay.ContextMenu
-import sux.client.{Config, InterfaceState}
+import sux.client.{Config, InterfaceOrchestration, InterfaceState}
 import sux.client.rendering.extensions.ExtendedCanvasRenderingContext2D
 import sux.client.rendering.layers.{BackgroundGradientRenderLayer, BackgroundGridRenderLayer, ContextMenuRenderLayer, EntitiesRenderLayer, RenderLayer}
+import sux.common.utils.OptionExtensions._
 
 import scala.collection.mutable
 
@@ -118,34 +119,18 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
       drawInfo.camera.panY -= camera.panRate * squareScope
     }
 
-    if (InterfaceState.getKeyDown("f")) {
-      if (InterfaceState.getIsContextMenuOpen) InterfaceState.closeContextMenu()
-      else {
-        InterfaceState.setContextMenu(ContextMenu.getContextMenu)
-        InterfaceState.setContextMenuCanvasCenter(getMouseCanvasPosition.asImmutable())
-        InterfaceState.openContextMenu()
-      }
-    }
+    if (InterfaceState.getKeyDown("f")) InterfaceOrchestration.toggleContextMenu()
 
     // Mouse
+    val hoverNode = InterfaceState.getHoverNode
+    val hoverEntity = InterfaceState.getHoverEntity
     if (InterfaceState.getClickLeft) {
-      val contextMenuHover = InterfaceState.getContextMenuHoverNode
-      if (contextMenuHover.isDefined) {
-        val hoverNode = contextMenuHover.get
-        if (hoverNode.children.nonEmpty) InterfaceState.setContextMenu(Right(hoverNode))
-        else {
-          println(hoverNode.name)
-          InterfaceState.closeContextMenu()
-          InterfaceState.clearContextMenuNode()
-          InterfaceState.clearContextMenuHoverNode()
-        }
-      } else {
-        InterfaceState.getHoverEntity match {
-          case Some(entity) => InterfaceState.setSelectedEntity(entity)
-          case None => InterfaceState.clearSelectedEntity()
-        }
-      }
+      if (hoverNode.isDefined) InterfaceOrchestration.clickNode(hoverNode.get)
+      else if (hoverEntity.isDefined) InterfaceOrchestration.clickEntity(hoverEntity.get)
+      else InterfaceOrchestration.deselectAll()
     }
+
+    // TODO: Fix grid line width with save and restore
 
     // Late Update (After Input)
     val lateSquareScope = drawInfo.camera.scope * drawInfo.camera.scope

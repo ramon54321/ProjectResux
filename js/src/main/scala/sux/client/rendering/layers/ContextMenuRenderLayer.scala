@@ -46,14 +46,14 @@ class ContextMenuRenderLayer extends RenderLayer {
           val canvasCenterPosition = canvasCenterPositionWithNode._1
           val node = canvasCenterPositionWithNode._2
           val isHovering = Vec2F.squareDistance(mouseCanvasPosition.asVector2F(), canvasCenterPosition.asVector2F()) < nodeSquareRadius
-          if (isHovering) InterfaceState.setContextMenuHoverNode(node)
+          if (isHovering) InterfaceState.setHoverNode(node)
           drawInfo.context.fillStyle = if (isHovering) nodeStyleHover else nodeStyle
           Circle.drawCircleFillCanvasSpace(drawInfo, canvasCenterPosition, nodeRadius)
           drawInfo.context.fillStyle = nodeTextStyle
           Text.drawTextCanvasSpace(drawInfo, canvasCenterPosition + Vec2D(0, 4), node.name.toUpperCase)
           isHovering
         })
-        if (!hoverMap.contains(true)) InterfaceState.clearContextMenuHoverNode()
+        if (!hoverMap.contains(true)) InterfaceState.clearHoverNode()
       })
       contextMenu.left.foreach(error => {
         val contextMenuCanvasPosition = InterfaceState.getContextMenuCanvasCenter
