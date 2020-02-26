@@ -86,11 +86,14 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
 
     // Global Perframe Calculations
     drawInfo.worldTime = System.currentTimeMillis()
-    drawInfo.worldState.getEntityByNearest(Mapping.canvasSpaceToWorldSpace(
-      drawInfo, InterfaceState.getMouseCanvasPosition.asImmutable()), drawInfo.worldTime) match {
+
+    val nearestHoverEntity = drawInfo.worldState.getEntityByNearest(Mapping.canvasSpaceToWorldSpace(drawInfo,
+      InterfaceState.getMouseCanvasPosition.asImmutable()), drawInfo.worldTime)
+    nearestHoverEntity match {
       case Some(entity) =>
         InterfaceState.setNearestHoverEntity(entity)
-        val distance = Vec2F.distance(InterfaceState.getMouseCanvasPosition.asVector2F(), Mapping.worldSpaceToCanvasSpace(drawInfo, entity.position.lookup(drawInfo.worldTime)).asVector2F())
+        val distance = Vec2F.distance(InterfaceState.getMouseCanvasPosition.asVector2F(),
+          Mapping.worldSpaceToCanvasSpace(drawInfo, entity.position.lookup(drawInfo.worldTime)).asVector2F())
         if (distance < Config.hoverRadius) InterfaceState.setHoverEntity(entity)
         else InterfaceState.clearHoverEntity()
       case None =>
