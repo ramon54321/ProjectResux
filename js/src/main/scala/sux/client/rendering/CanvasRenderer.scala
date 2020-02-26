@@ -130,8 +130,6 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
       else InterfaceOrchestration.deselectAll()
     }
 
-    // TODO: Fix grid line width with save and restore
-
     // Late Update (After Input)
     val lateSquareScope = drawInfo.camera.scope * drawInfo.camera.scope
     drawInfo.camera.scale = (500 / Config.spritePixelsPerMeter) / lateSquareScope
