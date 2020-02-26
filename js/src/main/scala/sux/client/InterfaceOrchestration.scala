@@ -19,10 +19,10 @@ object InterfaceOrchestration {
     InterfaceState.clearHoverNode()
     InterfaceState.clearSelectedEntity()
   }
-  def clickNode(node: ContextMenuNode): Unit = {
+  def clickNode(frameInfo: FrameInfo, node: ContextMenuNode): Unit = {
     if (node.children.nonEmpty) InterfaceState.setContextMenu(Right(node))
     else {
-      println(node.name)
+      node.action(frameInfo)
       deselectAll()
     }
   }

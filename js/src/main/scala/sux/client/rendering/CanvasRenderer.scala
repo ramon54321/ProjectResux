@@ -83,11 +83,15 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
   private def update(): Unit = {
     RenderStatistics.reset()
 
-    // Global Perframe Calculations
+    // Global Per-frame Calculations
+    // World Time
     frameInfo.worldTime = System.currentTimeMillis()
+
+    // Mouse Position
     frameInfo.mouseCanvasPosition = InterfaceState.getMouseCanvasPosition.asImmutable()
     frameInfo.mouseWorldPosition = Mapping.canvasSpaceToWorldSpace(frameInfo, frameInfo.mouseCanvasPosition)
 
+    // Hover and Selections
     frameInfo.worldState.getEntityByNearest(frameInfo.mouseWorldPosition, frameInfo.worldTime) match {
       case Some(entity) =>
         InterfaceState.setNearestHoverEntity(entity)
@@ -128,7 +132,7 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
     val hoverNode = InterfaceState.getHoverNode
     val hoverEntity = InterfaceState.getHoverEntity
     if (InterfaceState.getClickLeft) {
-      if (hoverNode.isDefined) InterfaceOrchestration.clickNode(hoverNode.get)
+      if (hoverNode.isDefined) InterfaceOrchestration.clickNode(frameInfo, hoverNode.get)
       else if (hoverEntity.isDefined) InterfaceOrchestration.clickEntity(hoverEntity.get)
       else InterfaceOrchestration.deselectAll()
     }

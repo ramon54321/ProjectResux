@@ -28,6 +28,7 @@ case class MVec2D(var x: Double, var y: Double) {
   }
 }
 case class Vec2F(x: Float, y: Float) {
+  def toSerializable: Vec2F.Serializable = HashMap("x" -> x, "y" -> y)
   def asMutable(): MVec2F = {
     MVec2F(x, y)
   }
@@ -71,6 +72,10 @@ object DVec2F {
 }
 
 object Vec2F {
+  type Serializable = HashMap[String, Float]
+  def fromSerializable(serializable: Serializable): Vec2F =
+    Vec2F(serializable("x"), serializable("y"))
+
   def add(a: Vec2F, b: Vec2F): Vec2F = {
     Vec2F(a.x + b.x, a.y + b.y)
   }

@@ -1,5 +1,7 @@
 package sux.client
 
-class ContextMenuNode(val name: String, val children: ContextMenuNode*) {
+import sux.client.rendering.FrameInfo
+
+class ContextMenuNode(val name: String, val action: FrameInfo => Unit, val children: ContextMenuNode*) {
 
 }

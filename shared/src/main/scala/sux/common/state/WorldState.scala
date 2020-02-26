@@ -15,8 +15,8 @@ class WorldState {
   def patch(action: WorldAction): Unit = action match {
     case Signal(code) => println(s"Patching with Signal ${code}")
     case Ping(timestamp) => println(s"Patching with Ping $timestamp")
-    case SpawnEntity(id, positionSerializable) => entitiesById.put(id, new Entity(id, DVec2F.fromSerializable(positionSerializable)))
-    case SetEntityPosition(id, positionSerializable) => entitiesById(id).position = DVec2F.fromSerializable(positionSerializable)
+    case SpawnEntity(id, position) => entitiesById.put(id, new Entity(id, DVec2F.fromSerializable(position)))
+    case SetEntityPosition(id, position) => entitiesById(id).position = DVec2F.fromSerializable(position)
     case SetEntityAttributeString(id, name, value) => entitiesById(id).setAttribute(name, value)
     case SetEntityAttributeFloat(id, name, value) => entitiesById(id).setAttribute(name, value)
     case SetEntityAttributeInt(id, name, value) => entitiesById(id).setAttribute(name, value)
