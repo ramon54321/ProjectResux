@@ -13,13 +13,13 @@ object Specs {
     "Soda" -> Soda
   )
 
-  private trait Health {
+  trait Health {
     val maxHealth: Float
   }
-  private trait Storage {
+  trait Storage {
     val maxStorage: Float
   }
-  private trait LeggedMover {
+  trait LeggedMover {
     protected val proneBaseSpeed: Float
     protected val crouchBaseSpeed: Float
     protected val walkBaseSpeed: Float
