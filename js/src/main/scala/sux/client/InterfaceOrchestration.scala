@@ -5,17 +5,21 @@ import sux.client.rendering.FrameInfo
 import sux.common.state.Entity
 
 object InterfaceOrchestration {
-  def toggleContextMenu(frameInfo: FrameInfo): Unit = {
-    if (InterfaceState.getIsContextMenuOpen) InterfaceState.closeContextMenu()
-    else {
-      InterfaceState.setContextMenu(ContextMenu.getContextMenu)
-      InterfaceState.setContextMenuCanvasCenter(frameInfo.mouseCanvasPosition)
-      InterfaceState.openContextMenu()
-    }
+  def openContextMenu(frameInfo: FrameInfo): Unit = {
+    InterfaceState.setContextMenu(ContextMenu.getContextMenu)
+    InterfaceState.setContextMenuCanvasCenter(frameInfo.mouseCanvasPosition)
+    InterfaceState.openContextMenu()
   }
-  def deselectAll(): Unit = {
+  def closeContextMenu(): Unit = {
     InterfaceState.closeContextMenu()
     InterfaceState.clearContextMenu()
+  }
+  def toggleContextMenu(frameInfo: FrameInfo): Unit = {
+    if (InterfaceState.getIsContextMenuOpen) closeContextMenu()
+    else openContextMenu(frameInfo)
+  }
+  def deselectAll(): Unit = {
+    closeContextMenu()
     InterfaceState.clearHoverNode()
     InterfaceState.clearSelectedEntity()
   }
@@ -23,10 +27,11 @@ object InterfaceOrchestration {
     if (node.children.nonEmpty) InterfaceState.setContextMenu(Right(node))
     else {
       node.action(frameInfo)
-      deselectAll()
+      closeContextMenu()
     }
   }
-  def clickEntity(entity: Entity): Unit = {
+  def clickEntity(frameInfo: FrameInfo, entity: Entity): Unit = {
     InterfaceState.setSelectedEntity(entity)
+    if (InterfaceState.getIsContextMenuOpen) closeContextMenu()
   }
 }
