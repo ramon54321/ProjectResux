@@ -5,14 +5,11 @@ import sux.common.math.{MVec2D, MutableRectV2F, Vec2D, Vec2F}
 import sux.common.state.WorldState
 import org.scalajs.dom.{document, window}
 import org.scalajs.dom.raw.{HTMLCanvasElement, UIEvent}
-import sux.client.InterfaceState.{clearHoverNode, clearContextMenu, getMouseCanvasPosition}
 import sux.client.debug.layers.{DebugBuildInfoRenderLayer, DebugSpacialRenderLayer}
 import sux.client.debug.{RenderStatistics, Timer}
-import sux.client.gameplay.ContextMenu
 import sux.client.{Config, InterfaceOrchestration, InterfaceState}
 import sux.client.rendering.extensions.ExtendedCanvasRenderingContext2D
 import sux.client.rendering.layers.{BackgroundGradientRenderLayer, BackgroundGridRenderLayer, ContextMenuRenderLayer, EntitiesRenderLayer, RenderLayer}
-import sux.common.utils.OptionExtensions._
 
 import scala.collection.mutable
 
