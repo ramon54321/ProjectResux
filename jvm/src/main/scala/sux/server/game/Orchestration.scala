@@ -11,8 +11,8 @@ object Orchestration {
     Hub.patchWorldState(WorldActions.SpawnEntity(id, position.toSerializable))
     Hub.patchWorldState(WorldActions.SetEntityAttributeString(id, "Name", "Alan P. Wilson"))
     Hub.patchWorldState(WorldActions.SetEntityAttributeInt(id, "Rank", 3))
-    Hub.patchWorldState(WorldActions.SetEntityAttributeFloat(id, "Health", 100f))
-    Hub.patchWorldState(WorldActions.SetEntityAttributeFloat(id, "Munitions", 100f))
+    Hub.patchWorldState(WorldActions.SetEntityAttributeFloat(id, "Health", Specs.Rifleman.maxHealth))
+    Hub.patchWorldState(WorldActions.SetEntityAttributeFloat(id, "Munitions", Specs.Rifleman.maxStorage))
   }
 
   // TODO: Split into layers -> entityId or pure entity as parameter?
