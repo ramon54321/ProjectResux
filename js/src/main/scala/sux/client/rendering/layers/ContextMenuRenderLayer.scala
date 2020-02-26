@@ -20,7 +20,6 @@ class ContextMenuRenderLayer extends RenderLayer {
 
   override def draw(drawInfo: DrawInfo) {
     timer.markStart()
-    drawInfo.context.save()
 
     drawInfo.context.textAlign = "center"
     if (InterfaceState.getIsContextMenuOpen) {
@@ -61,7 +60,6 @@ class ContextMenuRenderLayer extends RenderLayer {
       })
     }
 
-    drawInfo.context.restore()
     timer.markEnd()
   }
 }

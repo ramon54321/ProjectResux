@@ -161,7 +161,11 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
     renderTimer.markStart()
     clear()
 
-    renderLayers.foreach(_.draw(drawInfo))
+    renderLayers.foreach(renderLayer => {
+      drawInfo.context.save()
+      renderLayer.draw(drawInfo)
+      drawInfo.context.restore()
+    })
 
     drawInfo.context.fillStyle = "rgba(255, 255, 255, 0.85)"
     renderTimer.markEnd()
