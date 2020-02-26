@@ -37,7 +37,7 @@ object Pathfinder {
   def getPath[T](start: T, end: T)(implicit vector: Vector[T]): T = start.add(end).inverse()
 }
 
-object VectorMain extends App {
+object VectorMain {
     import Vector._
     val path = Pathfinder.getPath(Vec2F(0f, 0f), Vec2F(4f, 5f))
     val path2 = Pathfinder.getPath(Vec2D(0.0, 0.0), Vec2D(4.0, 5.0))

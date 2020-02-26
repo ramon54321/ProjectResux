@@ -1,33 +1,117 @@
 package sux.scratch
 
-import scala.util.Try
-import cats.Applicative
-import cats.implicits.catsStdInstancesForOption
+//sealed trait OptionOp[A, B]
+//case class SomeOp[A, B](option: Option[A], op: A => B) extends OptionOp[A, B]
+//case class NoneOp[A, B](option: Option[A], op: () => B) extends OptionOp[A, B]
+
+object OptionExtensions {
+//  def doOp[A, B](optionOp: OptionOp[A, B]): Boolean = {
+//    optionOp match {
+//      case SomeOp(option, op) if option.isDefined =>
+//        op(option.get)
+//        true
+//      case NoneOp(option, op) if option.isEmpty =>
+//        op()
+//        true
+//      case _ => false
+//    }
+//  }
+//  def doAll(optionOps: OptionOp[_, _]*): Unit = {
+//    val lastIndex = optionOps.size - 1
+//    var i = 0
+//    while (i <= lastIndex) {
+//      doOp(optionOps(i))
+//      i += 1
+//    }
+//  }
+//  def doFirst(optionOps: OptionOp[_, _]*): Unit = {
+//    val lastIndex = optionOps.size - 1
+//    var i = 0
+//    while (i <= lastIndex) {
+//      if (doOp(optionOps(i))) return
+//      i += 1
+//    }
+//  }
+  implicit class OptionExtension[A](option: Option[A]) {
+//    def someOp[B](op: A => B): SomeOp[A, B] = SomeOp[A, B](option, op)
+//    def noneOp[B](op: () => B): NoneOp[A, B] = NoneOp[A, B](option, op)
+//    def handle[B](someOp: A => _, noneOp: () => _): Unit = option match {
+//      case Some(value) => someOp(value)
+//      case None => noneOp()
+//    }
+
+    private var hasDoneOp = false
+
+    def doOp(op: A => _): OptionExtension[A] = {
+      option match {
+        case Some(value) =>
+          op(value)
+
+        case None =>
+      }
+      hasDoneOp = true
+      this
+    }
+
+//    def elseDoOp(op: A => _): OptionExtension[A] = {
+//
+//    }
+
+    def toOption: Option[A] = option
+  }
+}
 
 object Main extends App {
-  println()
 
-  def getDiscountedQuote(initialQuote: Double): Double =
-    if (initialQuote > 50.0) initialQuote * 0.80
-    else initialQuote
+  import OptionExtensions._
 
-  def formatUSD(value: Double): Option[String] = Try(f"USD $value%.2f").toOption
+  val leftClick = Some()
+  val hoverNode = Some("Andy")
+  val hoverEntity = None
 
-  def insuranceRateQuote(age: Int, ticketCount: Int): Double = age * ticketCount
+//  if (leftClick.isDefined) {
+//    if (hoverNode.isDefined) selectNode(hoverNode.get)
+//    else if (hoverEntity.isDefined) selectEntity(hoverEntity.get)
+//    else deselectAll()
+//  }
 
-  def parseInsuranceRateQuote(age: String, ticketCount: String): Option[Double] = {
-    val optAge: Option[Int] = Try(age.toInt).toOption
-    val optTicketCount: Option[Int] = Try(ticketCount.toInt).toOption
-    Applicative[Option].map2(optAge, optTicketCount)(insuranceRateQuote)
+  if (leftClick.isDefined) {
+    hoverNode
+      .doOp(println)
+//      .elseDoOp(println("No Hover Node"))
+//      .elseDoOp(println())
   }
 
-  val quote = parseInsuranceRateQuote("34", "2")
-    .map(getDiscountedQuote)
-    .flatMap(formatUSD)
-    .getOrElse("Could not get quote")
+//  println(hoverNode.name)
+//  hoverNode.doOp((node: String) => println("World"))
+//  println(hoverNode.name)
 
-  println(quote)
+
+//  val a = None
+//  val b = Some(65)
+//  val c = Some("Hello")
+//  val d: Option[String] = None
+//
+//  println("\nDoFirst")
+//  doFirst(
+//    a.someOp(println),
+//    b.someOp(x => println(s"Hey ${x * 5}")),
+//    d.noneOp(() => println("D None")),
+//    d.someOp(d => println(s"D is $d"))
+//  )
+//
+//  println("\nDoAll")
+//  doAll(
+//    a.someOp(println),
+//    b.someOp(x => println(s"Hey ${x * 5}")),
+//    d.noneOp(() => println("D None")),
+//    d.someOp(d => println(s"D is $d"))
+//  )
+//
+//  println("\nHandle")
+//  c.handle((c: String) => println(s"Handling C which is $c"), () => println("No C"))
 }
+
 
 
 
