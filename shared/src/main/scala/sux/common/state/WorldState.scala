@@ -20,6 +20,7 @@ class WorldState {
     case SetEntityAttributeString(id, name, value) => entitiesById(id).setAttribute(name, value)
     case SetEntityAttributeFloat(id, name, value) => entitiesById(id).setAttribute(name, value)
     case SetEntityAttributeInt(id, name, value) => entitiesById(id).setAttribute(name, value)
+    case _ => println(s"[CRITICAL] Unknown WorldAction Received - $action")
   }
 
   private val entitiesById = new mutable.HashMap[String, Entity]()
