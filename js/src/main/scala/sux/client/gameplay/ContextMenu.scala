@@ -1,6 +1,5 @@
 package sux.client.gameplay
 
-import sux.client.rendering.FrameInfo
 import sux.client.{ContextMenuNode, InterfaceState}
 
 object ContextMenu {
@@ -8,9 +7,9 @@ object ContextMenu {
     val selectedEntity = InterfaceState.getSelectedEntity
     if (selectedEntity.isDefined) {
       Right(createContextMenu(
-        new ContextMenuNode("Move", (frameInfo: FrameInfo) => Orchestration.moveEntity(selectedEntity.get, frameInfo.mouseWorldPosition)),
+        new ContextMenuNode("Move", frameInfo => Orchestration.moveEntity(selectedEntity.get, frameInfo.mouseWorldPosition)),
         new ContextMenuNode("Debug", _ => Unit,
-          new ContextMenuNode("Entity", _ => println(selectedEntity.get)),
+          new ContextMenuNode("Entity", frameInfo => println(selectedEntity.get.toString(frameInfo.worldTime))),
           new ContextMenuNode("B", _ => Unit),
           new ContextMenuNode("C", _ => Unit)
         ),

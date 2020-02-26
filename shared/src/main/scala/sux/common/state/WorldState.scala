@@ -9,6 +9,8 @@ class Entity(val id: String, var position: DVec2F) {
   val attributes = new mutable.HashMap[String, Any]
   def setAttribute(name: String, value: Any): Unit = attributes.put(name, value)
   def getAttribute[T](name: String): Option[T] = attributes.get(name).asInstanceOf[Option[T]]
+
+  def toString(time: Long): String = s"ID:   $id\nPOS:  ${position.lookup(time)}"
 }
 
 class WorldState {
