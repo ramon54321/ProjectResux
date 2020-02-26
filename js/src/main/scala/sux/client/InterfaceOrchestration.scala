@@ -13,6 +13,7 @@ object InterfaceOrchestration {
   def closeContextMenu(): Unit = {
     InterfaceState.closeContextMenu()
     InterfaceState.clearContextMenu()
+    InterfaceState.clearHoverNode()
   }
   def toggleContextMenu(frameInfo: FrameInfo): Unit = {
     if (InterfaceState.getIsContextMenuOpen) closeContextMenu()
@@ -20,7 +21,6 @@ object InterfaceOrchestration {
   }
   def deselectAll(): Unit = {
     closeContextMenu()
-    InterfaceState.clearHoverNode()
     InterfaceState.clearSelectedEntity()
   }
   def clickNode(frameInfo: FrameInfo, node: ContextMenuNode): Unit = {
