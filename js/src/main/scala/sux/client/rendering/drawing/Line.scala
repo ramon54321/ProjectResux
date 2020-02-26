@@ -1,29 +1,29 @@
 package sux.client.rendering.drawing
 
 import sux.client.debug.RenderStatistics
-import sux.client.rendering.{DrawInfo, Mapping}
+import sux.client.rendering.{FrameInfo, Mapping}
 import sux.common.math.Vec2F
 
 object Line {
-  def drawLine(drawInfo: DrawInfo, worldStart: Vec2F, worldEnd: Vec2F): Unit = {
-    val canvasStart = Mapping.worldSpaceToCanvasSpace(drawInfo, worldStart)
-    val canvasEnd = Mapping.worldSpaceToCanvasSpace(drawInfo, worldEnd)
-    drawInfo.context.beginPath()
-    drawInfo.context.moveTo(canvasStart.x, canvasStart.y)
-    drawInfo.context.lineTo(canvasEnd.x, canvasEnd.y)
-    drawInfo.context.stroke()
+  def drawLine(frameInfo: FrameInfo, worldStart: Vec2F, worldEnd: Vec2F): Unit = {
+    val canvasStart = Mapping.worldSpaceToCanvasSpace(frameInfo, worldStart)
+    val canvasEnd = Mapping.worldSpaceToCanvasSpace(frameInfo, worldEnd)
+    frameInfo.context.beginPath()
+    frameInfo.context.moveTo(canvasStart.x, canvasStart.y)
+    frameInfo.context.lineTo(canvasEnd.x, canvasEnd.y)
+    frameInfo.context.stroke()
     RenderStatistics.drawLineCount += 1
   }
 
-  def drawPath(drawInfo: DrawInfo, worldPoints: List[Vec2F]): Unit = {
+  def drawPath(frameInfo: FrameInfo, worldPoints: List[Vec2F]): Unit = {
     if (worldPoints.size < 2) {
       return
     }
-    val canvasPoints = worldPoints.map(worldPoint => Mapping.worldSpaceToCanvasSpace(drawInfo, worldPoint))
-    drawInfo.context.beginPath()
-    drawInfo.context.moveTo(canvasPoints.head.x, canvasPoints.head.y)
-    canvasPoints.tail.foreach(canvasPoint => drawInfo.context.lineTo(canvasPoint.x, canvasPoint.y))
-    drawInfo.context.stroke()
+    val canvasPoints = worldPoints.map(worldPoint => Mapping.worldSpaceToCanvasSpace(frameInfo, worldPoint))
+    frameInfo.context.beginPath()
+    frameInfo.context.moveTo(canvasPoints.head.x, canvasPoints.head.y)
+    canvasPoints.tail.foreach(canvasPoint => frameInfo.context.lineTo(canvasPoint.x, canvasPoint.y))
+    frameInfo.context.stroke()
     RenderStatistics.drawLineCount += 1
   }
 }

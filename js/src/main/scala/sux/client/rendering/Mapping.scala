@@ -11,11 +11,11 @@ object Mapping {
    * Screen Space has the origin in the center and ranges from -1 to 1 from bottom to top corrected with the camera aspect ratio
    * World Space is the actual position of the entity from which logic is calculated
    */
-  def worldSpaceToCanvasSpace(drawInfo: DrawInfo, worldPoint: Vec2F): Vec2D = screenSpaceToCanvasSpace(drawInfo.canvasSize, worldSpaceToScreenSpace(drawInfo.camera, worldPoint))
-  def worldSpaceToCanvasSpace(drawInfo: DrawInfo, worldValue: Float): Double = screenSpaceToCanvasSpace(drawInfo.canvasSize, worldSpaceToScreenSpace(drawInfo.camera, worldValue))
+  def worldSpaceToCanvasSpace(frameInfo: FrameInfo, worldPoint: Vec2F): Vec2D = screenSpaceToCanvasSpace(frameInfo.canvasSize, worldSpaceToScreenSpace(frameInfo.camera, worldPoint))
+  def worldSpaceToCanvasSpace(frameInfo: FrameInfo, worldValue: Float): Double = screenSpaceToCanvasSpace(frameInfo.canvasSize, worldSpaceToScreenSpace(frameInfo.camera, worldValue))
 
-  def canvasSpaceToWorldSpace(drawInfo: DrawInfo, canvasPoint: Vec2D): Vec2F = screenSpaceToWorldSpace(drawInfo.camera, canvasSpaceToScreenSpace(drawInfo.canvasSize, canvasPoint))
-  def canvasSpaceToWorldSpace(drawInfo: DrawInfo, canvasValue: Double): Float = screenSpaceToWorldSpace(drawInfo.camera, canvasSpaceToScreenSpace(drawInfo.canvasSize, canvasValue))
+  def canvasSpaceToWorldSpace(frameInfo: FrameInfo, canvasPoint: Vec2D): Vec2F = screenSpaceToWorldSpace(frameInfo.camera, canvasSpaceToScreenSpace(frameInfo.canvasSize, canvasPoint))
+  def canvasSpaceToWorldSpace(frameInfo: FrameInfo, canvasValue: Double): Float = screenSpaceToWorldSpace(frameInfo.camera, canvasSpaceToScreenSpace(frameInfo.canvasSize, canvasValue))
 
   private def worldSpaceToScreenSpace(camera: Camera, worldPoint: Vec2F): Vec2F = {
     // worldSpace to translatedSpace

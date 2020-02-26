@@ -1,48 +1,48 @@
 package sux.client.rendering.drawing
 
 import sux.client.debug.RenderStatistics
-import sux.client.rendering.DrawInfo
+import sux.client.rendering.FrameInfo
 import sux.client.rendering.Mapping._
 import sux.common.math.{Rect, Vec2D, Vec2F}
 
 import scala.math.Pi
 
 object Circle {
-  def drawCircle(drawInfo: DrawInfo, worldCenter: Vec2F, canvasRadius: Double, ignoreBounds: Boolean = false): Unit = {
-    if (!Rect.isInBounds(drawInfo.screenWorldRect, worldCenter) && !ignoreBounds) return
-    val canvasCenter = worldSpaceToCanvasSpace(drawInfo, worldCenter)
-    drawInfo.context.beginPath()
-    drawInfo.context.arc(canvasCenter.x, canvasCenter.y, canvasRadius, 0.0, Pi * 2)
-    drawInfo.context.stroke()
+  def drawCircle(frameInfo: FrameInfo, worldCenter: Vec2F, canvasRadius: Double, ignoreBounds: Boolean = false): Unit = {
+    if (!Rect.isInBounds(frameInfo.screenWorldRect, worldCenter) && !ignoreBounds) return
+    val canvasCenter = worldSpaceToCanvasSpace(frameInfo, worldCenter)
+    frameInfo.context.beginPath()
+    frameInfo.context.arc(canvasCenter.x, canvasCenter.y, canvasRadius, 0.0, Pi * 2)
+    frameInfo.context.stroke()
     RenderStatistics.drawCircleCount += 1
   }
 
-  def drawCircleFill(drawInfo: DrawInfo, worldCenter: Vec2F, canvasRadius: Double, ignoreBounds: Boolean = false): Unit = {
-    if (!Rect.isInBounds(drawInfo.screenWorldRect, worldCenter) && !ignoreBounds) return
-    val canvasCenter = worldSpaceToCanvasSpace(drawInfo, worldCenter)
-    drawInfo.context.beginPath()
-    drawInfo.context.arc(canvasCenter.x, canvasCenter.y, canvasRadius, 0.0, Pi * 2)
-    drawInfo.context.fill()
+  def drawCircleFill(frameInfo: FrameInfo, worldCenter: Vec2F, canvasRadius: Double, ignoreBounds: Boolean = false): Unit = {
+    if (!Rect.isInBounds(frameInfo.screenWorldRect, worldCenter) && !ignoreBounds) return
+    val canvasCenter = worldSpaceToCanvasSpace(frameInfo, worldCenter)
+    frameInfo.context.beginPath()
+    frameInfo.context.arc(canvasCenter.x, canvasCenter.y, canvasRadius, 0.0, Pi * 2)
+    frameInfo.context.fill()
     RenderStatistics.drawCircleCount += 1
   }
 
-  def drawCircleFillCanvasSpace(drawInfo: DrawInfo, canvasCenter: Vec2D, canvasRadius: Double): Unit = {
-    drawInfo.context.beginPath()
-    drawInfo.context.arc(canvasCenter.x, canvasCenter.y, canvasRadius, 0.0, Pi * 2)
-    drawInfo.context.fill()
+  def drawCircleFillCanvasSpace(frameInfo: FrameInfo, canvasCenter: Vec2D, canvasRadius: Double): Unit = {
+    frameInfo.context.beginPath()
+    frameInfo.context.arc(canvasCenter.x, canvasCenter.y, canvasRadius, 0.0, Pi * 2)
+    frameInfo.context.fill()
     RenderStatistics.drawCircleCount += 1
   }
 
-  def drawArc(drawInfo: DrawInfo, worldCenter: Vec2F, worldRadius: Float, startAngle: Float, endAngle: Float): Unit = {
-    if (!Rect.isInBounds(drawInfo.screenWorldRect, worldCenter)) return
-    val canvasCenter = worldSpaceToCanvasSpace(drawInfo, worldCenter)
-    val canvasRadius = worldSpaceToCanvasSpace(drawInfo, worldRadius)
+  def drawArc(frameInfo: FrameInfo, worldCenter: Vec2F, worldRadius: Float, startAngle: Float, endAngle: Float): Unit = {
+    if (!Rect.isInBounds(frameInfo.screenWorldRect, worldCenter)) return
+    val canvasCenter = worldSpaceToCanvasSpace(frameInfo, worldCenter)
+    val canvasRadius = worldSpaceToCanvasSpace(frameInfo, worldRadius)
     val canvasStartAngle = mapAngleToCanvas(startAngle)
     val canvasEndAngle = mapAngleToCanvas(endAngle)
     val counterClockwise = canvasStartAngle > canvasEndAngle
-    drawInfo.context.beginPath()
-    drawInfo.context.arc(canvasCenter.x, canvasCenter.y, canvasRadius, canvasStartAngle.toDouble, canvasEndAngle.toDouble, counterClockwise)
-    drawInfo.context.stroke()
+    frameInfo.context.beginPath()
+    frameInfo.context.arc(canvasCenter.x, canvasCenter.y, canvasRadius, canvasStartAngle.toDouble, canvasEndAngle.toDouble, counterClockwise)
+    frameInfo.context.stroke()
     RenderStatistics.drawCircleCount += 1
   }
 }

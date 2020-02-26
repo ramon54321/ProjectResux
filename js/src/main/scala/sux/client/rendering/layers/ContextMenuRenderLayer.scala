@@ -2,7 +2,7 @@ package sux.client.rendering.layers
 
 import sux.client.InterfaceState
 import sux.client.debug.Timer
-import sux.client.rendering.DrawInfo
+import sux.client.rendering.FrameInfo
 import sux.client.rendering.drawing.{Circle, Text}
 import sux.common.math.{Vec2D, Vec2F}
 
@@ -19,10 +19,10 @@ class ContextMenuRenderLayer extends RenderLayer {
   private val nodeRadius = 24.0
   private val nodeSquareRadius = nodeRadius * nodeRadius
 
-  override def draw(drawInfo: DrawInfo) {
+  override def draw(frameInfo: FrameInfo) {
     timer.markStart()
 
-    drawInfo.context.textAlign = "center"
+    frameInfo.context.textAlign = "center"
     if (InterfaceState.getIsContextMenuOpen) {
       val contextMenu = InterfaceState.getContextMenu
       contextMenu.right.foreach(root => {
@@ -47,19 +47,19 @@ class ContextMenuRenderLayer extends RenderLayer {
           val node = canvasCenterPositionWithNode._2
           val isHovering = Vec2F.squareDistance(mouseCanvasPosition.asVector2F(), canvasCenterPosition.asVector2F()) < nodeSquareRadius
           if (isHovering) InterfaceState.setHoverNode(node)
-          drawInfo.context.fillStyle = if (isHovering) nodeStyleHover else nodeStyle
-          Circle.drawCircleFillCanvasSpace(drawInfo, canvasCenterPosition, nodeRadius)
-          drawInfo.context.fillStyle = nodeTextStyle
-          Text.drawTextCanvasSpace(drawInfo, canvasCenterPosition + Vec2D(0, 4), node.name.toUpperCase)
+          frameInfo.context.fillStyle = if (isHovering) nodeStyleHover else nodeStyle
+          Circle.drawCircleFillCanvasSpace(frameInfo, canvasCenterPosition, nodeRadius)
+          frameInfo.context.fillStyle = nodeTextStyle
+          Text.drawTextCanvasSpace(frameInfo, canvasCenterPosition + Vec2D(0, 4), node.name.toUpperCase)
           isHovering
         })
-        drawInfo.context.fillStyle = centerStyle
-        Circle.drawCircleFillCanvasSpace(drawInfo, contextMenuCanvasPosition, 2)
+        frameInfo.context.fillStyle = centerStyle
+        Circle.drawCircleFillCanvasSpace(frameInfo, contextMenuCanvasPosition, 2)
         if (!hoverMap.contains(true)) InterfaceState.clearHoverNode()
       })
       contextMenu.left.foreach(error => {
         val contextMenuCanvasPosition = InterfaceState.getContextMenuCanvasCenter
-        Text.drawTextCanvasSpace(drawInfo, contextMenuCanvasPosition + Vec2D(0, 4), error)
+        Text.drawTextCanvasSpace(frameInfo, contextMenuCanvasPosition + Vec2D(0, 4), error)
       })
     }
 

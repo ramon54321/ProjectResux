@@ -15,7 +15,7 @@ import scala.collection.mutable
 
 class CanvasRenderer(private val worldState: WorldState, private var camera: Camera) {
   private val canvas: HTMLCanvasElement = document.createElement("canvas").asInstanceOf[HTMLCanvasElement]
-  private val drawInfo: DrawInfo = DrawInfo(
+  private val frameInfo: FrameInfo = FrameInfo(
     canvas.getContext("2d").asInstanceOf[ExtendedCanvasRenderingContext2D],
     MVec2D(0.0, 0.0),
     MutableRectV2F(Vec2F(0f, 0f), Vec2F(0f, 0f)),
@@ -40,7 +40,7 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
   // Listeners
   window.onresize = (event: UIEvent) => {
     setCanvasDimensions()
-    renderLayers.foreach(_.onCanvasResize(drawInfo))
+    renderLayers.foreach(_.onCanvasResize(frameInfo))
   }
   document.onkeydown = key => InterfaceState.setKeyDown(Mapping.mapKeyCodeToKey(key.keyCode))
   document.onkeyup = key => InterfaceState.setKeyUp(Mapping.mapKeyCodeToKey(key.keyCode))
@@ -48,10 +48,10 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
   document.onmousedown = _ => InterfaceState.setClickLeft()
 
   // Start Draw
-  draw(drawInfo)
+  draw(frameInfo)
 
   private def initRenderLayers(): Unit = {
-    renderLayers += new BackgroundGradientRenderLayer(drawInfo)
+    renderLayers += new BackgroundGradientRenderLayer(frameInfo)
     renderLayers += new BackgroundGridRenderLayer()
     renderLayers += new DebugSpacialRenderLayer()
     renderLayers += new DebugBuildInfoRenderLayer()
@@ -68,9 +68,9 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
     canvas.height = screenHeight * 2
     canvas.style.width = s"${screenWidth}px"
     canvas.style.height = s"${screenHeight}px"
-    drawInfo.canvasSize.x = screenWidth
-    drawInfo.canvasSize.y = screenHeight
-    drawInfo.context.scale(2, 2)
+    frameInfo.canvasSize.x = screenWidth
+    frameInfo.canvasSize.y = screenHeight
+    frameInfo.context.scale(2, 2)
   }
 
   // TODO: Move out of renderer
@@ -82,15 +82,15 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
     RenderStatistics.reset()
 
     // Global Perframe Calculations
-    drawInfo.worldTime = System.currentTimeMillis()
+    frameInfo.worldTime = System.currentTimeMillis()
 
-    val nearestHoverEntity = drawInfo.worldState.getEntityByNearest(Mapping.canvasSpaceToWorldSpace(drawInfo,
-      InterfaceState.getMouseCanvasPosition.asImmutable()), drawInfo.worldTime)
+    val nearestHoverEntity = frameInfo.worldState.getEntityByNearest(Mapping.canvasSpaceToWorldSpace(frameInfo,
+      InterfaceState.getMouseCanvasPosition.asImmutable()), frameInfo.worldTime)
     nearestHoverEntity match {
       case Some(entity) =>
         InterfaceState.setNearestHoverEntity(entity)
         val distance = Vec2F.distance(InterfaceState.getMouseCanvasPosition.asVector2F(),
-          Mapping.worldSpaceToCanvasSpace(drawInfo, entity.position.lookup(drawInfo.worldTime)).asVector2F())
+          Mapping.worldSpaceToCanvasSpace(frameInfo, entity.position.lookup(frameInfo.worldTime)).asVector2F())
         if (distance < Config.hoverRadius) InterfaceState.setHoverEntity(entity)
         else InterfaceState.clearHoverEntity()
       case None =>
@@ -99,24 +99,24 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
     }
 
     // Keys
-    val squareScope = drawInfo.camera.scope * drawInfo.camera.scope
+    val squareScope = frameInfo.camera.scope * frameInfo.camera.scope
     if (InterfaceState.getKey("q") && squareScope < camera.scopeSquareMax) {
-      drawInfo.camera.scope += camera.scopeRate
+      frameInfo.camera.scope += camera.scopeRate
     }
     if (InterfaceState.getKey("e") && squareScope > camera.scopeSquareMin) {
-      drawInfo.camera.scope -= camera.scopeRate
+      frameInfo.camera.scope -= camera.scopeRate
     }
     if (InterfaceState.getKey("d")) {
-      drawInfo.camera.panX += camera.panRate * squareScope
+      frameInfo.camera.panX += camera.panRate * squareScope
     }
     if (InterfaceState.getKey("a")) {
-      drawInfo.camera.panX -= camera.panRate * squareScope
+      frameInfo.camera.panX -= camera.panRate * squareScope
     }
     if (InterfaceState.getKey("w")) {
-      drawInfo.camera.panY += camera.panRate * squareScope
+      frameInfo.camera.panY += camera.panRate * squareScope
     }
     if (InterfaceState.getKey("s")) {
-      drawInfo.camera.panY -= camera.panRate * squareScope
+      frameInfo.camera.panY -= camera.panRate * squareScope
     }
 
     if (InterfaceState.getKeyDown("f")) InterfaceOrchestration.toggleContextMenu()
@@ -131,10 +131,10 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
     }
 
     // Late Update (After Input)
-    val lateSquareScope = drawInfo.camera.scope * drawInfo.camera.scope
-    drawInfo.camera.scale = (500 / Config.spritePixelsPerMeter) / lateSquareScope
-    drawInfo.screenWorldRect.topLeft = Mapping.canvasSpaceToWorldSpace(drawInfo, Vec2D(0.0, 0.0))
-    drawInfo.screenWorldRect.bottomRight = Mapping.canvasSpaceToWorldSpace(drawInfo, Vec2D(drawInfo.canvasSize.x, drawInfo.canvasSize.y))
+    val lateSquareScope = frameInfo.camera.scope * frameInfo.camera.scope
+    frameInfo.camera.scale = (500 / Config.spritePixelsPerMeter) / lateSquareScope
+    frameInfo.screenWorldRect.topLeft = Mapping.canvasSpaceToWorldSpace(frameInfo, Vec2D(0.0, 0.0))
+    frameInfo.screenWorldRect.bottomRight = Mapping.canvasSpaceToWorldSpace(frameInfo, Vec2D(frameInfo.canvasSize.x, frameInfo.canvasSize.y))
 
     // Reset Keys
     InterfaceState.resetKeys()
@@ -142,11 +142,11 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
   }
 
   private def clear(): Unit = {
-    drawInfo.context.clearRect(0.0, 0.0, drawInfo.canvasSize.x, drawInfo.canvasSize.y)
+    frameInfo.context.clearRect(0.0, 0.0, frameInfo.canvasSize.x, frameInfo.canvasSize.y)
   }
 
-  private def draw(drawInfo: DrawInfo): Unit = {
-    window.requestAnimationFrame((_: Double) => draw(drawInfo))
+  private def draw(frameInfo: FrameInfo): Unit = {
+    window.requestAnimationFrame((_: Double) => draw(frameInfo))
     frameCounter += 1
     if (frameCounter % 120 == 0) slowUpdate()
 
@@ -160,12 +160,12 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
     clear()
 
     renderLayers.foreach(renderLayer => {
-      drawInfo.context.save()
-      renderLayer.draw(drawInfo)
-      drawInfo.context.restore()
+      frameInfo.context.save()
+      renderLayer.draw(frameInfo)
+      frameInfo.context.restore()
     })
 
-    drawInfo.context.fillStyle = "rgba(255, 255, 255, 0.85)"
+    frameInfo.context.fillStyle = "rgba(255, 255, 255, 0.85)"
     renderTimer.markEnd()
   }
 }

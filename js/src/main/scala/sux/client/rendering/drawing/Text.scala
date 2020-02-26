@@ -1,7 +1,7 @@
 package sux.client.rendering.drawing
 
 import sux.client.debug.RenderStatistics
-import sux.client.rendering.{DrawInfo, Mapping}
+import sux.client.rendering.{FrameInfo, Mapping}
 import sux.common.math.{Rect, Vec2D, Vec2F}
 
 object Text {
@@ -16,26 +16,26 @@ object Text {
 
   import FontStyle._
 
-  def setFont(drawInfo: DrawInfo, fontStyle: FontStyle): Unit = {
-    drawInfo.context.font = fontStyle.style
+  def setFont(frameInfo: FrameInfo, fontStyle: FontStyle): Unit = {
+    frameInfo.context.font = fontStyle.style
   }
 
-  def drawText(drawInfo: DrawInfo, worldPosition: Vec2F, text: String): Unit = {
-    if (!Rect.isInBounds(drawInfo.screenWorldRect, worldPosition)) return
-    val canvasPosition = Mapping.worldSpaceToCanvasSpace(drawInfo, worldPosition)
-    drawInfo.context.fillText(text, canvasPosition.x, canvasPosition.y)
+  def drawText(frameInfo: FrameInfo, worldPosition: Vec2F, text: String): Unit = {
+    if (!Rect.isInBounds(frameInfo.screenWorldRect, worldPosition)) return
+    val canvasPosition = Mapping.worldSpaceToCanvasSpace(frameInfo, worldPosition)
+    frameInfo.context.fillText(text, canvasPosition.x, canvasPosition.y)
     RenderStatistics.drawTextCount += 1
   }
 
-  def drawText(drawInfo: DrawInfo, worldPosition: Vec2F, canvasOffset: Vec2D, text: String): Unit = {
-    if (!Rect.isInBounds(drawInfo.screenWorldRect, worldPosition)) return
-    val canvasPosition = Vec2F.add(Mapping.worldSpaceToCanvasSpace(drawInfo, worldPosition).asVector2F(), Vec2F.scaleY(canvasOffset.asVector2F(), -1))
-    drawInfo.context.fillText(text, canvasPosition.x, canvasPosition.y)
+  def drawText(frameInfo: FrameInfo, worldPosition: Vec2F, canvasOffset: Vec2D, text: String): Unit = {
+    if (!Rect.isInBounds(frameInfo.screenWorldRect, worldPosition)) return
+    val canvasPosition = Vec2F.add(Mapping.worldSpaceToCanvasSpace(frameInfo, worldPosition).asVector2F(), Vec2F.scaleY(canvasOffset.asVector2F(), -1))
+    frameInfo.context.fillText(text, canvasPosition.x, canvasPosition.y)
     RenderStatistics.drawTextCount += 1
   }
 
-  def drawTextCanvasSpace(drawInfo: DrawInfo, canvasPosition: Vec2D, text: String): Unit = {
-    drawInfo.context.fillText(text, canvasPosition.x, canvasPosition.y)
+  def drawTextCanvasSpace(frameInfo: FrameInfo, canvasPosition: Vec2D, text: String): Unit = {
+    frameInfo.context.fillText(text, canvasPosition.x, canvasPosition.y)
     RenderStatistics.drawTextCount += 1
   }
 }

@@ -1,7 +1,7 @@
 package sux.client.rendering.layers
 
 import sux.client.debug.Timer
-import sux.client.rendering.DrawInfo
+import sux.client.rendering.FrameInfo
 import sux.client.rendering.drawing.Line._
 import sux.common.math.{Spread, Vec2F}
 
@@ -19,29 +19,29 @@ class BackgroundGridRenderLayer extends RenderLayer {
   private val major = 10f
   private val minor = 2f
 
-  override def draw(drawInfo: DrawInfo) {
+  override def draw(frameInfo: FrameInfo) {
     timer.markStart()
 
-    val xStart = Spread.floored(2, drawInfo.screenWorldRect.topLeft.x)
-    val xEnd = Spread.ceiled(2, drawInfo.screenWorldRect.bottomRight.x)
-    val yStart = Spread.floored(2, drawInfo.screenWorldRect.bottomRight.y)
-    val yEnd = Spread.ceiled(2, drawInfo.screenWorldRect.topLeft.y)
+    val xStart = Spread.floored(2, frameInfo.screenWorldRect.topLeft.x)
+    val xEnd = Spread.ceiled(2, frameInfo.screenWorldRect.bottomRight.x)
+    val yStart = Spread.floored(2, frameInfo.screenWorldRect.bottomRight.y)
+    val yEnd = Spread.ceiled(2, frameInfo.screenWorldRect.topLeft.y)
     val width = abs(xStart - xEnd)
     val scale = if (width > 250) "Big" else "Small"
 
     var xCurrent = xStart
     while (xCurrent < xEnd) {
       if (xCurrent % superMajor == 0f) {
-        drawInfo.context.strokeStyle = styleSuperMajor
-        drawInfo.context.lineWidth = 2.0
-        drawLine(drawInfo, Vec2F(xCurrent, yStart), Vec2F(xCurrent, yEnd))
-        drawInfo.context.lineWidth = 1.0
+        frameInfo.context.strokeStyle = styleSuperMajor
+        frameInfo.context.lineWidth = 2.0
+        drawLine(frameInfo, Vec2F(xCurrent, yStart), Vec2F(xCurrent, yEnd))
+        frameInfo.context.lineWidth = 1.0
       } else if (xCurrent % major == 0f) {
-        drawInfo.context.strokeStyle = styleMajor
-        drawLine(drawInfo, Vec2F(xCurrent, yStart), Vec2F(xCurrent, yEnd))
+        frameInfo.context.strokeStyle = styleMajor
+        drawLine(frameInfo, Vec2F(xCurrent, yStart), Vec2F(xCurrent, yEnd))
       } else if (scale == "Small") {
-        drawInfo.context.strokeStyle = styleMinor
-        drawLine(drawInfo, Vec2F(xCurrent, yStart), Vec2F(xCurrent, yEnd))
+        frameInfo.context.strokeStyle = styleMinor
+        drawLine(frameInfo, Vec2F(xCurrent, yStart), Vec2F(xCurrent, yEnd))
       }
       xCurrent += minor
     }
@@ -49,16 +49,16 @@ class BackgroundGridRenderLayer extends RenderLayer {
     var yCurrent = yStart
     while (yCurrent < yEnd) {
       if (yCurrent % superMajor == 0f) {
-        drawInfo.context.lineWidth = 2.0
-        drawInfo.context.strokeStyle = styleSuperMajor
-        drawLine(drawInfo, Vec2F(xStart, yCurrent), Vec2F(xEnd, yCurrent))
-        drawInfo.context.lineWidth = 1.0
+        frameInfo.context.lineWidth = 2.0
+        frameInfo.context.strokeStyle = styleSuperMajor
+        drawLine(frameInfo, Vec2F(xStart, yCurrent), Vec2F(xEnd, yCurrent))
+        frameInfo.context.lineWidth = 1.0
       } else if (yCurrent % major == 0f) {
-        drawInfo.context.strokeStyle = styleMajor
-        drawLine(drawInfo, Vec2F(xStart, yCurrent), Vec2F(xEnd, yCurrent))
+        frameInfo.context.strokeStyle = styleMajor
+        drawLine(frameInfo, Vec2F(xStart, yCurrent), Vec2F(xEnd, yCurrent))
       } else if (scale == "Small") {
-        drawInfo.context.strokeStyle = styleMinor
-        drawLine(drawInfo, Vec2F(xStart, yCurrent), Vec2F(xEnd, yCurrent))
+        frameInfo.context.strokeStyle = styleMinor
+        drawLine(frameInfo, Vec2F(xStart, yCurrent), Vec2F(xEnd, yCurrent))
       }
       yCurrent += minor
     }
