@@ -10,6 +10,10 @@ class Entity(val id: String, var position: DVec2F) {
   def setAttribute(name: String, value: Any): Unit = attributes.put(name, value)
   def getAttribute[T](name: String): Option[T] = attributes.get(name).asInstanceOf[Option[T]]
 
+  val items = new mutable.ListBuffer[String]
+  def addItem(name: String): Unit = items.append(name)
+  def removeItem(name: String): Unit = items -= name
+
   def toString(time: Long): String = s"ID:   $id\nPOS:  ${position.lookup(time)}"
 }
 
@@ -22,6 +26,8 @@ class WorldState {
     case SetEntityAttributeString(id, name, value) => entitiesById(id).setAttribute(name, value)
     case SetEntityAttributeFloat(id, name, value) => entitiesById(id).setAttribute(name, value)
     case SetEntityAttributeInt(id, name, value) => entitiesById(id).setAttribute(name, value)
+    case AddEntityItem(id, name) => entitiesById(id).addItem(name)
+    case RemoveEntityItem(id, name) => entitiesById(id).removeItem(name)
     case _ => println(s"[CRITICAL] Unknown WorldAction Received - $action")
   }
 

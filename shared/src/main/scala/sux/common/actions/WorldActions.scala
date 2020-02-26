@@ -12,6 +12,8 @@ object WorldActions {
   case class SetEntityAttributeString(id: String, name: String, value: String) extends WorldAction("SetEntityAttributeString")
   case class SetEntityAttributeFloat(id: String, name: String, value: Float) extends WorldAction("SetEntityAttributeFloat")
   case class SetEntityAttributeInt(id: String, name: String, value: Int) extends WorldAction("SetEntityAttributeInt")
+  case class AddEntityItem(id: String, name: String) extends WorldAction("AddEntityItem")
+  case class RemoveEntityItem(id: String, name: String) extends WorldAction("RemoveEntityItem")
 
   object Serializer extends JsonSerializer[WorldAction] {
     addClass[Signal]("Signal")
@@ -21,5 +23,7 @@ object WorldActions {
     addClass[SetEntityAttributeString]("SetEntityAttributeString")
     addClass[SetEntityAttributeFloat]("SetEntityAttributeFloat")
     addClass[SetEntityAttributeInt]("SetEntityAttributeInt")
+    addClass[AddEntityItem]("AddEntityItem")
+    addClass[RemoveEntityItem]("RemoveEntityItem")
   }
 }

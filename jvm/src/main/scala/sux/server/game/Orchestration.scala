@@ -3,6 +3,7 @@ package sux.server.game
 import sux.common.actions.WorldActions
 import sux.common.math.{DVec2F, LUTF, Vec2F}
 import sux.server.Hub
+import sux.server.game.Specs.Items.Item
 
 object Orchestration {
   def spawnEntity(id: String): Unit = {
@@ -42,6 +43,16 @@ object Orchestration {
     Hub.worldState.getEntityById(id)
       .flatMap(entity => entity.getAttribute[Float]("Health"))
       .foreach(health => Hub.patchWorldState(WorldActions.SetEntityAttributeFloat(id, "Health", health + amount)))
+  }
+
+  def addEntityItem(id: String, item: Item): Unit = {
+    Hub.worldState.getEntityById(id)
+      .foreach(_ => Hub.patchWorldState(WorldActions.AddEntityItem(id, item.name)))
+  }
+
+  def removeEntityItem(id: String, item: Item): Unit = {
+    Hub.worldState.getEntityById(id)
+      .foreach(_ => Hub.patchWorldState(WorldActions.RemoveEntityItem(id, item.name)))
   }
 
   def teleportEntity(id: String, to: Vec2F): Unit = {

@@ -3,6 +3,16 @@ package sux.server.game
 import scala.collection.immutable.HashMap
 
 object Specs {
+  import Items._
+
+  val humans: HashMap[String, Human] = HashMap(
+    "Rifleman" -> Rifleman,
+    "Engineer" -> Engineer
+  )
+  val items: HashMap[String, Item] = HashMap(
+    "Soda" -> Soda
+  )
+
   private trait Health {
     val maxHealth: Float
   }
@@ -25,7 +35,7 @@ object Specs {
     final def sprintSpeed: Float = sprintBaseSpeed * speedBaseMultiplier
   }
 
-  private trait Human extends Health with Storage with LeggedMover {
+  trait Human extends Health with Storage with LeggedMover {
     override val maxHealth: Float = 100
     override val maxStorage: Float = 50
     override val proneBaseSpeed: Float = 0.4f
@@ -43,8 +53,17 @@ object Specs {
     override protected val speedBaseMultiplier: Float = 0.85f
   }
 
-  val humans: HashMap[String, Human] = HashMap(
-    "Rifleman" -> Rifleman,
-    "Engineer" -> Engineer
-  )
+  object Items {
+    trait Item {
+      val name: String
+      val volume: Float
+    }
+    trait Junk extends Item {
+
+    }
+    object Soda extends Junk {
+      override val name: String = "Soda"
+      override val volume: Float = 3.5f
+    }
+  }
 }
