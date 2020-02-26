@@ -8,16 +8,12 @@ object ContextMenu {
     val selectedEntity = InterfaceState.getSelectedEntity
     if (selectedEntity.isDefined) {
       Right(createContextMenu(
-        new ContextMenuNode("Move", (frameInfo: FrameInfo) => Orchestration.moveEntity(
-          InterfaceState.getSelectedEntity.get,
-          frameInfo.mouseWorldPosition
-        )),
-        new ContextMenuNode("Build", _ => Unit,
-          new ContextMenuNode("Rally Point", _ => Unit),
-          new ContextMenuNode("Sandbags", _ => Unit),
-          new ContextMenuNode("Barbed Wire", _ => Unit)
+        new ContextMenuNode("Move", (frameInfo: FrameInfo) => Orchestration.moveEntity(selectedEntity.get, frameInfo.mouseWorldPosition)),
+        new ContextMenuNode("Debug", _ => Unit,
+          new ContextMenuNode("Entity", _ => println(selectedEntity.get)),
+          new ContextMenuNode("B", _ => Unit),
+          new ContextMenuNode("C", _ => Unit)
         ),
-        new ContextMenuNode("Attack", _ => Unit)
       ))
     } else {
       Left("No Entity Selected")
