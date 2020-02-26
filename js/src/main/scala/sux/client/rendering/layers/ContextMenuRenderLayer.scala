@@ -13,6 +13,7 @@ class ContextMenuRenderLayer extends RenderLayer {
   private val nodeStyle = "rgba(255, 255, 255, 0.5)"
   private val nodeStyleHover = "rgba(255, 255, 255, 0.9)"
   private val nodeTextStyle = "rgba(0, 122, 204, 1.0)"
+  private val centerStyle = "rgba(255, 255, 255, 0.6)"
 
   private val radialSpread = 40.0
   private val nodeRadius = 24.0
@@ -52,6 +53,8 @@ class ContextMenuRenderLayer extends RenderLayer {
           Text.drawTextCanvasSpace(drawInfo, canvasCenterPosition + Vec2D(0, 4), node.name.toUpperCase)
           isHovering
         })
+        drawInfo.context.fillStyle = centerStyle
+        Circle.drawCircleFillCanvasSpace(drawInfo, contextMenuCanvasPosition, 2)
         if (!hoverMap.contains(true)) InterfaceState.clearHoverNode()
       })
       contextMenu.left.foreach(error => {
