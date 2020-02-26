@@ -31,4 +31,17 @@ object Hub {
     println(f"[DISPATCHING SINGLE] ${worldActionJson}")
     webSocket.send(worldActionJson)
   }
+
+  def dispatchFullStateTo(webSocket: WebSocket): Unit = {
+    val worldActions = worldState.entities.flatMap(entity => {
+      val spawnAction = WorldActions.SpawnEntity(entity.id, entity.position.toSerializable)
+      val attributeActions = entity.attributes.map(attribute => attribute._2 match {
+        case a: String => WorldActions.SetEntityAttributeString(entity.id, attribute._1, a)
+        case a: Int => WorldActions.SetEntityAttributeInt(entity.id, attribute._1, a)
+        case a: Float => WorldActions.SetEntityAttributeFloat(entity.id, attribute._1, a)
+      })
+      Seq(spawnAction) ++ attributeActions
+    })
+    worldActions.foreach(worldAction => dispatchTo(worldAction, webSocket))
+  }
 }
