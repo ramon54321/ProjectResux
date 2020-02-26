@@ -33,7 +33,7 @@ class ContextMenuRenderLayer extends RenderLayer {
           else 12
         val angleDelta = 2 * math.Pi / divisions
         val nodesWithIndex = root.children.zipWithIndex
-        val mouseCanvasPosition = InterfaceState.getMouseCanvasPosition
+        val mouseCanvasPosition = frameInfo.mouseCanvasPosition
         val contextMenuCanvasPosition = InterfaceState.getContextMenuCanvasCenter
         val canvasCenterPositionWithNodes = nodesWithIndex.map(nodeWithIndex => {
           val index = nodeWithIndex._2

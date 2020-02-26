@@ -21,7 +21,9 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
     MutableRectV2F(Vec2F(0f, 0f), Vec2F(0f, 0f)),
     worldState,
     0L,
-    camera
+    camera,
+    Vec2D(0,0),
+    Vec2F(0,0),
   )
 
   private val renderLayers: mutable.MutableList[RenderLayer] = new mutable.MutableList[RenderLayer]
@@ -83,13 +85,14 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
 
     // Global Perframe Calculations
     frameInfo.worldTime = System.currentTimeMillis()
+    frameInfo.mouseCanvasPosition = InterfaceState.getMouseCanvasPosition.asImmutable()
+    frameInfo.mouseWorldPosition = Mapping.canvasSpaceToWorldSpace(frameInfo, frameInfo.mouseCanvasPosition)
 
-    val nearestHoverEntity = frameInfo.worldState.getEntityByNearest(Mapping.canvasSpaceToWorldSpace(frameInfo,
-      InterfaceState.getMouseCanvasPosition.asImmutable()), frameInfo.worldTime)
-    nearestHoverEntity match {
+    frameInfo.worldState.getEntityByNearest(frameInfo.mouseWorldPosition, frameInfo.worldTime) match {
       case Some(entity) =>
         InterfaceState.setNearestHoverEntity(entity)
-        val distance = Vec2F.distance(InterfaceState.getMouseCanvasPosition.asVector2F(),
+        // TODO: Add utility for getting entity canvas position
+        val distance = Vec2F.distance(frameInfo.mouseCanvasPosition.asVector2F(),
           Mapping.worldSpaceToCanvasSpace(frameInfo, entity.position.lookup(frameInfo.worldTime)).asVector2F())
         if (distance < Config.hoverRadius) InterfaceState.setHoverEntity(entity)
         else InterfaceState.clearHoverEntity()
@@ -119,7 +122,7 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
       frameInfo.camera.panY -= camera.panRate * squareScope
     }
 
-    if (InterfaceState.getKeyDown("f")) InterfaceOrchestration.toggleContextMenu()
+    if (InterfaceState.getKeyDown("f")) InterfaceOrchestration.toggleContextMenu(frameInfo)
 
     // Mouse
     val hoverNode = InterfaceState.getHoverNode

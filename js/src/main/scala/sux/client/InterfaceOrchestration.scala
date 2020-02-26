@@ -1,15 +1,15 @@
 package sux.client
 
-import sux.client.InterfaceState.getMouseCanvasPosition
 import sux.client.gameplay.ContextMenu
+import sux.client.rendering.FrameInfo
 import sux.common.state.Entity
 
 object InterfaceOrchestration {
-  def toggleContextMenu(): Unit = {
+  def toggleContextMenu(frameInfo: FrameInfo): Unit = {
     if (InterfaceState.getIsContextMenuOpen) InterfaceState.closeContextMenu()
     else {
       InterfaceState.setContextMenu(ContextMenu.getContextMenu)
-      InterfaceState.setContextMenuCanvasCenter(getMouseCanvasPosition.asImmutable())
+      InterfaceState.setContextMenuCanvasCenter(frameInfo.mouseCanvasPosition)
       InterfaceState.openContextMenu()
     }
   }
