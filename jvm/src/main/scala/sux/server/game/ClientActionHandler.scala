@@ -11,6 +11,7 @@ object ClientActionHandler {
     case ClientActions.Ping(timestamp) => Hub.dispatchTo(WorldActions.Ping(timestamp), webSocket)
     case ClientActions.FullStateUpdate() => Hub.dispatchFullStateTo(webSocket)
     case ClientActions.MoveEntity(entityId, position, moveSpeed) => Orchestration.moveEntity(entityId, Vec2F.fromSerializable(position), moveSpeed)
+    case ClientActions.StopEntity(entityId) => Orchestration.stopEntity(entityId)
     case _ => println(s"[CRITICAL] Unknown ClientAction Received - $clientAction")
   }
 }

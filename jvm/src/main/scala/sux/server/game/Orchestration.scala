@@ -85,4 +85,14 @@ object Orchestration {
       Hub.patchWorldState(WorldActions.SetEntityPosition(id, path.toSerializable))
     }
   }
+
+  def stopEntity(id: String): Unit = {
+    val now = System.currentTimeMillis()
+    for {
+      entity <- Hub.worldState.getEntityById(id)
+      currentPosition <- Some(entity.position.lookup(now))
+    } yield {
+      Hub.patchWorldState(WorldActions.SetEntityPosition(id, currentPosition.asDeterministic().toSerializable))
+    }
+  }
 }

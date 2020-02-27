@@ -10,4 +10,8 @@ object Orchestration {
   def moveEntity(entity: Entity, position: Vec2F, moveSpeed: MoveSpeed): Unit = {
     Hub.dispatch(ClientActions.MoveEntity(entity.id, position.toSerializable, moveSpeed))
   }
+
+  def stopEntity(entity: Entity): Unit = {
+    Hub.dispatch(ClientActions.StopEntity(entity.id))
+  }
 }

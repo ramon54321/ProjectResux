@@ -11,6 +11,7 @@ object ContextMenu {
         new ContextMenuNode("Slow Move", frameInfo => Orchestration.moveEntity(selectedEntity.get, frameInfo.mouseWorldPosition, MoveSpeed.Slow)),
         new ContextMenuNode("Move", frameInfo => Orchestration.moveEntity(selectedEntity.get, frameInfo.mouseWorldPosition, MoveSpeed.Normal)),
         new ContextMenuNode("Fast Move", frameInfo => Orchestration.moveEntity(selectedEntity.get, frameInfo.mouseWorldPosition, MoveSpeed.Fast)),
+        new ContextMenuNode("Stop", frameInfo => Orchestration.stopEntity(selectedEntity.get)),
         new ContextMenuNode("Debug", _ => Unit,
           new ContextMenuNode("Entity", frameInfo => println(selectedEntity.get.toString(frameInfo.worldTime))),
           new ContextMenuNode("Spec Tag", _ => println(selectedEntity.get.specTag)),
