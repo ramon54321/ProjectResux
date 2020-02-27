@@ -26,7 +26,7 @@ class EntitiesRenderLayer extends RenderLayer {
         Text.drawText(frameInfo, position, Vec2D(10.0, index * 14.0), f"${key}: ${value}")
       })
     })
-    InterfaceState.getSelectedEntity.foreach(entity => Circle.drawCircle(frameInfo, entity.position.lookup(frameInfo.worldTime), 10f))
+    InterfaceState.getSelectedEntity.foreach(entity => Circle.drawCircle(frameInfo, entity.position.lookup(frameInfo.worldTime), 7f))
 
     timer.markEnd()
   }
