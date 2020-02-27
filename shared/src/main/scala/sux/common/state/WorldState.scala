@@ -17,7 +17,7 @@ trait Inventory {
   def removeItem(name: String): Unit = items -= name
 }
 
-abstract class Entity(val id: String, val spec: String, var position: DVec2F) extends Attributes {
+abstract class Entity(val id: String, val specTag: String, var position: DVec2F) extends Attributes {
   def toString(time: Long): String = s"ID:   $id\nPOS:  ${position.lookup(time)}"
 }
 
@@ -34,8 +34,8 @@ class WorldState {
     case Signal(code) => println(s"Patching with Signal ${code}")
     case Ping(timestamp) => println(s"Patching with Ping $timestamp")
 
-    case SpawnHuman(id, spec, position) => entitiesById.put(id, new Human(id, spec, DVec2F.fromSerializable(position)))
-    case SpawnItem(id, spec, position) => entitiesById.put(id, new Item(id, spec, DVec2F.fromSerializable(position)))
+    case SpawnHuman(id, specTag, position) => entitiesById.put(id, new Human(id, specTag, DVec2F.fromSerializable(position)))
+    case SpawnItem(id, specTag, position) => entitiesById.put(id, new Item(id, specTag, DVec2F.fromSerializable(position)))
     case SetEntityPosition(id, position) => entitiesById(id).position = DVec2F.fromSerializable(position)
 
     case SetEntityAttributeString(id, name, value) => entitiesById(id).setAttribute(name, value)

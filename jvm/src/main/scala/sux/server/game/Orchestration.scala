@@ -11,12 +11,12 @@ object Orchestration {
     val position = DVec2F(LUTF(now -> 0f, now + 10000L -> 20f), LUTF(now -> 0f, now + 15000L -> 10f))
     spec match {
       case human: Human =>
-        Hub.patchWorldState(WorldActions.SpawnHuman(id, spec.spec, position.toSerializable))
+        Hub.patchWorldState(WorldActions.SpawnHuman(id, spec.tag, position.toSerializable))
         Hub.patchWorldState(WorldActions.SetEntityAttributeString(id, "Name", "Alan P. Wilson"))
         Hub.patchWorldState(WorldActions.SetEntityAttributeInt(id, "Rank", 3))
         Hub.patchWorldState(WorldActions.SetEntityAttributeFloat(id, "Health", human.maxHealth))
         Hub.patchWorldState(WorldActions.SetEntityAttributeFloat(id, "Munitions", human.maxStorage))
-      case item: Item => Hub.patchWorldState(WorldActions.SpawnItem(id, spec.spec, position.toSerializable))
+      case item: Item => Hub.patchWorldState(WorldActions.SpawnItem(id, spec.tag, position.toSerializable))
     }
   }
 

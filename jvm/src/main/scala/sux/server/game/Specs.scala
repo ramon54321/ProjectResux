@@ -3,7 +3,7 @@ package sux.server.game
 import scala.collection.immutable.HashMap
 
 sealed trait Spec {
-  val spec: String
+  val tag: String
 }
 
 object Specs {
@@ -47,11 +47,11 @@ object Specs {
   }
 
   object Rifleman extends Spec with Human {
-    override val spec: String = "Rifleman"
+    override val tag: String = "Rifleman"
     override val maxStorage: Float = 100
   }
   object Engineer extends Spec with Human {
-    override val spec: String = "Engineer"
+    override val tag: String = "Engineer"
     override val maxStorage: Float = 120
     override protected val speedBaseMultiplier: Float = 0.85f
   }
@@ -62,7 +62,7 @@ object Specs {
   }
 
   object Soda extends Spec with Item {
-    override val spec: String = "Soda"
+    override val tag: String = "Soda"
     override val name: String = "Soda"
     override val volume: Float = 3.5f
   }

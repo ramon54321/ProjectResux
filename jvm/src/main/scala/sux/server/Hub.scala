@@ -36,10 +36,10 @@ object Hub {
     val worldActions = worldState.entities.flatMap(entity => {
       val specActions = entity match {
         case human: Human => Seq(
-          WorldActions.SpawnHuman(entity.id, entity.spec, entity.position.toSerializable)
+          WorldActions.SpawnHuman(entity.id, entity.specTag, entity.position.toSerializable)
         ) ++ human.items.map(item => WorldActions.AddEntityItem(entity.id, item))
         case item: Item => Seq(
-          WorldActions.SpawnHuman(entity.id, entity.spec, entity.position.toSerializable)
+          WorldActions.SpawnHuman(entity.id, entity.specTag, entity.position.toSerializable)
         )
       }
       val commonActions = entity.attributes.map(attribute => attribute._2 match {
