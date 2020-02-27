@@ -1,5 +1,7 @@
 package sux.scratch
 
+import sux.scratch.MoveSpeed.MoveSpeed
+
 //sealed trait OptionOp[A, B]
 //case class SomeOp[A, B](option: Option[A], op: A => B) extends OptionOp[A, B]
 //case class NoneOp[A, B](option: Option[A], op: () => B) extends OptionOp[A, B]
@@ -61,13 +63,26 @@ object OptionExtensions {
   }
 }
 
+object MoveSpeed {
+  type MoveSpeed = String
+  val slow: MoveSpeed = "Slow"
+  val fast: MoveSpeed = "Fast"
+}
+
 object Main extends App {
 
-  import OptionExtensions._
 
-  val leftClick = Some()
-  val hoverNode = Some("Andy")
-  val hoverEntity = None
+  val speed: MoveSpeed = MoveSpeed.fast
+
+  println("Hello world 2!")
+
+
+
+//  import OptionExtensions._
+//
+//  val leftClick = Some()
+//  val hoverNode = Some("Andy")
+//  val hoverEntity = None
 
 //  if (leftClick.isDefined) {
 //    if (hoverNode.isDefined) selectNode(hoverNode.get)
@@ -75,12 +90,12 @@ object Main extends App {
 //    else deselectAll()
 //  }
 
-  if (leftClick.isDefined) {
-    hoverNode
-      .doOp(println)
+//  if (leftClick.isDefined) {
+//    hoverNode
+//      .doOp(println)
 //      .elseDoOp(println("No Hover Node"))
 //      .elseDoOp(println())
-  }
+//  }
 
 //  println(hoverNode.name)
 //  hoverNode.doOp((node: String) => println("World"))
