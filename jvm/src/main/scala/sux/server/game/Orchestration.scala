@@ -4,6 +4,7 @@ import sux.common.actions.WorldActions
 import sux.common.math.{DVec2F, LUTF, Vec2F}
 import sux.server.Hub
 import sux.server.game.Specs.{Human, Item}
+import sux.server.game.movement.Movement
 
 object Orchestration {
   def spawnEntity(id: String, spec: Spec): Unit = {
@@ -65,8 +66,12 @@ object Orchestration {
 
   def moveEntity(id: String, from: Vec2F, to: Vec2F): Unit = {
     val now = System.currentTimeMillis()
-    Hub.worldState.getEntityById(id)
-      .foreach(_ => Hub.patchWorldState(WorldActions.SetEntityPosition(id, DVec2F(now -> from, now + 8000 -> to).toSerializable)))
+    for {
+      entity <- Hub.worldState.getEntityById(id)
+      path <- Movement.getPath(entity, from, to, now)
+    } yield {
+      Hub.patchWorldState(WorldActions.SetEntityPosition(id, path.toSerializable))
+    }
   }
 
   def moveEntity(id: String, to: Vec2F): Unit = {

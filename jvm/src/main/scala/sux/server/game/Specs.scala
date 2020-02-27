@@ -7,7 +7,9 @@ sealed trait Spec {
 }
 
 object Specs {
-  val specs: HashMap[String, Spec] = HashMap(
+  def fromTag(tag: String): Spec = specs(tag)
+
+  private val specs: HashMap[String, Spec] = HashMap(
     "Rifleman" -> Rifleman,
     "Engineer" -> Engineer,
 
