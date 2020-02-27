@@ -69,7 +69,7 @@ object Orchestration {
     val now = System.currentTimeMillis()
     for {
       entity <- Hub.worldState.getEntityById(id)
-      path <- Movement.getPath(entity, from, to, now)
+      path <- Movement.getPath(entity, from, to, now, moveSpeed)
     } yield {
       Hub.patchWorldState(WorldActions.SetEntityPosition(id, path.toSerializable))
     }
@@ -80,7 +80,7 @@ object Orchestration {
     for {
       entity <- Hub.worldState.getEntityById(id)
       currentPosition <- Some(entity.position.lookup(now))
-      path <- Movement.getPath(entity, currentPosition, to, now)
+      path <- Movement.getPath(entity, currentPosition, to, now, moveSpeed)
     } yield {
       Hub.patchWorldState(WorldActions.SetEntityPosition(id, path.toSerializable))
     }
