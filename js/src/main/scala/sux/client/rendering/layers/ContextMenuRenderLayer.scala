@@ -36,8 +36,14 @@ class ContextMenuRenderLayer extends RenderLayer {
         val childCount = root.children.length
         val divisions =
           if (childCount <= 4) childCount
+          else if (childCount <= 6) 6
           else if (childCount <= 8) 8
           else 12
+        val spreadMultiplier =
+          if (childCount <= 4) 1f
+          else if (childCount <= 6) 1.4f
+          else if (childCount <= 8) 1.65f
+          else 2f
         val angleDelta = 2 * math.Pi / divisions
         val nodesWithIndex = root.children.zipWithIndex
         val mouseCanvasPosition = frameInfo.mouseCanvasPosition
@@ -45,8 +51,8 @@ class ContextMenuRenderLayer extends RenderLayer {
         val canvasCenterPositionWithNodes = nodesWithIndex.map(nodeWithIndex => {
           val index = nodeWithIndex._2
           val angle = (-angleDelta * index) + math.Pi / 2
-          val x = math.cos(angle) * radialSpread + contextMenuCanvasPosition.x
-          val y = math.sin(angle) * radialSpread + contextMenuCanvasPosition.y
+          val x = math.cos(angle) * radialSpread * spreadMultiplier + contextMenuCanvasPosition.x
+          val y = math.sin(angle) * radialSpread * spreadMultiplier + contextMenuCanvasPosition.y
           (Vec2D(x, y), nodeWithIndex._1)
         })
         val hoverMap = canvasCenterPositionWithNodes.map(canvasCenterPositionWithNode => {
@@ -56,8 +62,6 @@ class ContextMenuRenderLayer extends RenderLayer {
           if (isHovering) InterfaceState.setHoverNode(node)
           frameInfo.context.fillStyle = if (isHovering) nodeStyleHover else nodeStyle
           Circle.drawCircleFillCanvasSpace(frameInfo, canvasCenterPosition, nodeRadius)
-//          frameInfo.context.fillStyle = nodeTextStyle
-//          Text.drawTextCanvasSpace(frameInfo, canvasCenterPosition + Vec2D(0, 4), node.name.toUpperCase)
           drawText(frameInfo, canvasCenterPosition, node.name)
           isHovering
         })
