@@ -1,6 +1,7 @@
 package sux.server.game
 
 import sux.common.actions.WorldActions
+import sux.common.enums.Enums.MoveSpeed.MoveSpeed
 import sux.common.math.{DVec2F, LUTF, Vec2F}
 import sux.server.Hub
 import sux.server.game.Specs.{Human, Item}
@@ -64,7 +65,7 @@ object Orchestration {
     Hub.patchWorldState(WorldActions.SetEntityPosition(id, to.asDeterministic().toSerializable))
   }
 
-  def moveEntity(id: String, from: Vec2F, to: Vec2F): Unit = {
+  def moveEntity(id: String, from: Vec2F, to: Vec2F, moveSpeed: MoveSpeed): Unit = {
     val now = System.currentTimeMillis()
     for {
       entity <- Hub.worldState.getEntityById(id)
@@ -74,7 +75,7 @@ object Orchestration {
     }
   }
 
-  def moveEntity(id: String, to: Vec2F): Unit = {
+  def moveEntity(id: String, to: Vec2F, moveSpeed: MoveSpeed): Unit = {
     val now = System.currentTimeMillis()
     for {
       entity <- Hub.worldState.getEntityById(id)
