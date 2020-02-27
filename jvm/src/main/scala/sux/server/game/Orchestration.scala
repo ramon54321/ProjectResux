@@ -76,8 +76,12 @@ object Orchestration {
 
   def moveEntity(id: String, to: Vec2F): Unit = {
     val now = System.currentTimeMillis()
-    Hub.worldState.getEntityById(id)
-      .map(entity => entity.position.lookup(now))
-      .foreach(currentPosition => Hub.patchWorldState(WorldActions.SetEntityPosition(id, DVec2F(now -> currentPosition, now + 8000 -> to).toSerializable)))
+    for {
+      entity <- Hub.worldState.getEntityById(id)
+      currentPosition <- Some(entity.position.lookup(now))
+      path <- Movement.getPath(entity, currentPosition, to, now)
+    } yield {
+      Hub.patchWorldState(WorldActions.SetEntityPosition(id, path.toSerializable))
+    }
   }
 }
