@@ -10,14 +10,21 @@ class ContextMenuRenderLayer extends RenderLayer {
 
   private val timer = new Timer("ContextMenu")
 
-  private val nodeStyle = "rgba(255, 255, 255, 0.5)"
+  private val nodeStyle = "rgba(255, 255, 255, 0.75)"
   private val nodeStyleHover = "rgba(255, 255, 255, 0.9)"
   private val nodeTextStyle = "rgba(0, 122, 204, 1.0)"
-  private val centerStyle = "rgba(255, 255, 255, 0.6)"
+  private val centerStyle = "rgba(255, 255, 255, 0.75)"
 
   private val radialSpread = 40.0
   private val nodeRadius = 24.0
   private val nodeSquareRadius = nodeRadius * nodeRadius
+
+  private def drawText(frameInfo: FrameInfo, canvasCenterPosition: Vec2D, text: String): Unit = {
+    frameInfo.context.fillStyle = nodeTextStyle
+    val texts = text.split(' ')
+    val positions = texts.zipWithIndex.map(textWithIndex => canvasCenterPosition + Vec2D(0, 4 - (6 * (texts.length - 1)) + 12 * textWithIndex._2))
+    texts.zip(positions).foreach(textWithPosition => Text.drawTextCanvasSpace(frameInfo, textWithPosition._2, textWithPosition._1.toUpperCase))
+  }
 
   override def draw(frameInfo: FrameInfo) {
     timer.markStart()
@@ -49,8 +56,9 @@ class ContextMenuRenderLayer extends RenderLayer {
           if (isHovering) InterfaceState.setHoverNode(node)
           frameInfo.context.fillStyle = if (isHovering) nodeStyleHover else nodeStyle
           Circle.drawCircleFillCanvasSpace(frameInfo, canvasCenterPosition, nodeRadius)
-          frameInfo.context.fillStyle = nodeTextStyle
-          Text.drawTextCanvasSpace(frameInfo, canvasCenterPosition + Vec2D(0, 4), node.name.toUpperCase)
+//          frameInfo.context.fillStyle = nodeTextStyle
+//          Text.drawTextCanvasSpace(frameInfo, canvasCenterPosition + Vec2D(0, 4), node.name.toUpperCase)
+          drawText(frameInfo, canvasCenterPosition, node.name)
           isHovering
         })
         frameInfo.context.fillStyle = centerStyle
