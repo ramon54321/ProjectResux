@@ -3,7 +3,7 @@ package sux.server
 import org.java_websocket.WebSocket
 import sux.common.actions.WorldActions
 import sux.common.actions.WorldActions.WorldAction
-import sux.common.state.WorldState
+import sux.common.state.{Human, Item, WorldState}
 import sux.server.net.{WebSocketMessage, WebSocketServer}
 
 import scala.collection.mutable
@@ -34,13 +34,20 @@ object Hub {
 
   def dispatchFullStateTo(webSocket: WebSocket): Unit = {
     val worldActions = worldState.entities.flatMap(entity => {
-      val spawnAction = WorldActions.SpawnEntity(entity.id, entity.position.toSerializable)
-      val attributeActions = entity.attributes.map(attribute => attribute._2 match {
+      val specActions = entity match {
+        case human: Human => Seq(
+          WorldActions.SpawnHuman(entity.id, entity.spec, entity.position.toSerializable)
+        ) ++ human.items.map(item => WorldActions.AddEntityItem(entity.id, item))
+        case item: Item => Seq(
+          WorldActions.SpawnHuman(entity.id, entity.spec, entity.position.toSerializable)
+        )
+      }
+      val commonActions = entity.attributes.map(attribute => attribute._2 match {
         case a: String => WorldActions.SetEntityAttributeString(entity.id, attribute._1, a)
         case a: Int => WorldActions.SetEntityAttributeInt(entity.id, attribute._1, a)
         case a: Float => WorldActions.SetEntityAttributeFloat(entity.id, attribute._1, a)
       })
-      Seq(spawnAction) ++ attributeActions
+      specActions ++ commonActions
     })
     worldActions.foreach(worldAction => dispatchTo(worldAction, webSocket))
   }

@@ -5,29 +5,46 @@ import sux.common.math.{DVec2F, Vec2F}
 
 import scala.collection.mutable
 
-class Entity(val id: String, var position: DVec2F) {
+trait Attributes {
   val attributes = new mutable.HashMap[String, Any]
   def setAttribute(name: String, value: Any): Unit = attributes.put(name, value)
   def getAttribute[T](name: String): Option[T] = attributes.get(name).asInstanceOf[Option[T]]
+}
 
+trait Inventory {
   val items = new mutable.ListBuffer[String]
   def addItem(name: String): Unit = items.append(name)
   def removeItem(name: String): Unit = items -= name
+}
 
+abstract class Entity(val id: String, val spec: String, var position: DVec2F) extends Attributes {
   def toString(time: Long): String = s"ID:   $id\nPOS:  ${position.lookup(time)}"
+}
+
+class Human(id: String, spec: String, position: DVec2F) extends Entity(id, spec, position) with Inventory {
+
+}
+
+class Item(id: String, spec: String, position: DVec2F) extends Entity(id, spec, position) {
+
 }
 
 class WorldState {
   def patch(action: WorldAction): Unit = action match {
     case Signal(code) => println(s"Patching with Signal ${code}")
     case Ping(timestamp) => println(s"Patching with Ping $timestamp")
-    case SpawnEntity(id, position) => entitiesById.put(id, new Entity(id, DVec2F.fromSerializable(position)))
+
+    case SpawnHuman(id, spec, position) => entitiesById.put(id, new Human(id, spec, DVec2F.fromSerializable(position)))
+    case SpawnItem(id, spec, position) => entitiesById.put(id, new Item(id, spec, DVec2F.fromSerializable(position)))
     case SetEntityPosition(id, position) => entitiesById(id).position = DVec2F.fromSerializable(position)
+
     case SetEntityAttributeString(id, name, value) => entitiesById(id).setAttribute(name, value)
     case SetEntityAttributeFloat(id, name, value) => entitiesById(id).setAttribute(name, value)
     case SetEntityAttributeInt(id, name, value) => entitiesById(id).setAttribute(name, value)
-    case AddEntityItem(id, name) => entitiesById(id).addItem(name)
-    case RemoveEntityItem(id, name) => entitiesById(id).removeItem(name)
+
+    case AddEntityItem(id, name) => entitiesById(id).asInstanceOf[Human].addItem(name)
+    case RemoveEntityItem(id, name) => entitiesById(id).asInstanceOf[Human].removeItem(name)
+
     case _ => println(s"[CRITICAL] Unknown WorldAction Received - $action")
   }
 

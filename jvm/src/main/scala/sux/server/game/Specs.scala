@@ -2,15 +2,16 @@ package sux.server.game
 
 import scala.collection.immutable.HashMap
 
-object Specs {
-  import Items._
+sealed trait Spec {
+  val spec: String
+}
 
-  val humans: HashMap[String, Human] = HashMap(
+object Specs {
+  val specs: HashMap[String, Spec] = HashMap(
     "Rifleman" -> Rifleman,
-    "Engineer" -> Engineer
-  )
-  val items: HashMap[String, Item] = HashMap(
-    "Soda" -> Soda
+    "Engineer" -> Engineer,
+
+    "Soda" -> Soda,
   )
 
   trait Health {
@@ -45,25 +46,24 @@ object Specs {
     override val sprintBaseSpeed: Float = 5.8f
   }
 
-  object Rifleman extends Human {
+  object Rifleman extends Spec with Human {
+    override val spec: String = "Rifleman"
     override val maxStorage: Float = 100
   }
-  object Engineer extends Human {
+  object Engineer extends Spec with Human {
+    override val spec: String = "Engineer"
     override val maxStorage: Float = 120
     override protected val speedBaseMultiplier: Float = 0.85f
   }
 
-  object Items {
-    trait Item {
-      val name: String
-      val volume: Float
-    }
-    trait Junk extends Item {
+  trait Item {
+    val name: String
+    val volume: Float
+  }
 
-    }
-    object Soda extends Junk {
-      override val name: String = "Soda"
-      override val volume: Float = 3.5f
-    }
+  object Soda extends Spec with Item {
+    override val spec: String = "Soda"
+    override val name: String = "Soda"
+    override val volume: Float = 3.5f
   }
 }

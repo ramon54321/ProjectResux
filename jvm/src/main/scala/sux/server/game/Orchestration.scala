@@ -3,17 +3,21 @@ package sux.server.game
 import sux.common.actions.WorldActions
 import sux.common.math.{DVec2F, LUTF, Vec2F}
 import sux.server.Hub
-import sux.server.game.Specs.Items.Item
+import sux.server.game.Specs.{Human, Item}
 
 object Orchestration {
-  def spawnEntity(id: String): Unit = {
+  def spawnEntity(id: String, spec: Spec): Unit = {
     val now = System.currentTimeMillis()
     val position = DVec2F(LUTF(now -> 0f, now + 10000L -> 20f), LUTF(now -> 0f, now + 15000L -> 10f))
-    Hub.patchWorldState(WorldActions.SpawnEntity(id, position.toSerializable))
-    Hub.patchWorldState(WorldActions.SetEntityAttributeString(id, "Name", "Alan P. Wilson"))
-    Hub.patchWorldState(WorldActions.SetEntityAttributeInt(id, "Rank", 3))
-    Hub.patchWorldState(WorldActions.SetEntityAttributeFloat(id, "Health", Specs.Rifleman.maxHealth))
-    Hub.patchWorldState(WorldActions.SetEntityAttributeFloat(id, "Munitions", Specs.Rifleman.maxStorage))
+    spec match {
+      case human: Human =>
+        Hub.patchWorldState(WorldActions.SpawnHuman(id, spec.spec, position.toSerializable))
+        Hub.patchWorldState(WorldActions.SetEntityAttributeString(id, "Name", "Alan P. Wilson"))
+        Hub.patchWorldState(WorldActions.SetEntityAttributeInt(id, "Rank", 3))
+        Hub.patchWorldState(WorldActions.SetEntityAttributeFloat(id, "Health", human.maxHealth))
+        Hub.patchWorldState(WorldActions.SetEntityAttributeFloat(id, "Munitions", human.maxStorage))
+      case item: Item => Hub.patchWorldState(WorldActions.SpawnItem(id, spec.spec, position.toSerializable))
+    }
   }
 
   // TODO: Split into layers -> entityId or pure entity as parameter?
