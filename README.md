@@ -60,6 +60,8 @@ As of `0.0.2` there is no automated release script yet. A release can be done th
 #### 0.0.3
 
 - [ ] Initial path system (Move concatenation, not path-finding)
+- [ ] Add commit counter since last version
+- [ ] Add server logger
 - [x] Click to select
 - [x] Hover entity
 - [x] FrameInfo caching
@@ -74,9 +76,7 @@ As of `0.0.2` there is no automated release script yet. A release can be done th
 
 #### 0.0.2
 
-- [ ] Initial spec system
-- [ ] Add commit counter since last version
-- [ ] Add server logger
+- [x] Initial spec system
 - [x] Full State optimization
 - [x] Add movement methods to orchestration (Teleport, Move from A to B, Move from Current to B)
 - [x] Add sprite rendering
