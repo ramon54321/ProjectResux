@@ -22,7 +22,7 @@ object Main extends App {
           while (Hub.webSocketMessageQueue.nonEmpty) {
             val webSocketMessage = Hub.webSocketMessageQueue.dequeue()
             ClientActions.Serializer.fromJson(webSocketMessage.message)
-              .map(ClientActionHandler.handleClientAction(_, webSocketMessage.webSocket))
+              .map(ClientActionHandler.handleClientAction(_, webSocketMessage.time, webSocketMessage.webSocket))
           }
           TickHandler.tick(tickCount)
           Thread.sleep(1000)

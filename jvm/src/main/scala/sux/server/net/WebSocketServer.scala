@@ -28,7 +28,7 @@ class WebSocketServer(port: Int, onMessage: WebSocketMessage => Unit) extends Ja
 
   override def onMessage(webSocket: WebSocket, message: String): Unit = {
     println(s"[WSS] ${SocketUtils.getSocketId(webSocket).getOrElse("Unknown")}: $message")
-    onMessage(WebSocketMessage(webSocket, message))
+    onMessage(WebSocketMessage(webSocket, System.currentTimeMillis(), message))
   }
 
   override def onError(webSocket: WebSocket, ex: Exception): Unit = {

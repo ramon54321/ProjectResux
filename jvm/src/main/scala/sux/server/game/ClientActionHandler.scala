@@ -7,7 +7,7 @@ import sux.common.math.Vec2F
 import sux.server.Hub
 
 object ClientActionHandler {
-  def handleClientAction(clientAction: ClientAction, webSocket: WebSocket): Unit = clientAction match {
+  def handleClientAction(clientAction: ClientAction, time: Long, webSocket: WebSocket): Unit = clientAction match {
     case ClientActions.Ping(timestamp) => Hub.dispatchTo(WorldActions.Ping(timestamp), webSocket)
     case ClientActions.FullStateUpdate() => Hub.dispatchFullStateTo(webSocket)
     case ClientActions.MoveEntity(entityId, position, moveSpeed) => Orchestration.moveEntity(entityId, Vec2F.fromSerializable(position), moveSpeed)
