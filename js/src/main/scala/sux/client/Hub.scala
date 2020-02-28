@@ -17,4 +17,6 @@ object Hub {
   def dispatch(clientAction: ClientAction): Unit = {
     webSocket.send(ClientActions.Serializer.toJson(clientAction))
   }
+
+  def worldTime: Long = System.currentTimeMillis() + worldState.timeCorrection
 }

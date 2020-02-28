@@ -7,7 +7,7 @@ import org.scalajs.dom.{document, window}
 import org.scalajs.dom.raw.{HTMLCanvasElement, UIEvent}
 import sux.client.debug.layers.{DebugBuildInfoRenderLayer, DebugSpacialRenderLayer}
 import sux.client.debug.{RenderStatistics, Timer}
-import sux.client.{Config, InterfaceOrchestration, InterfaceState}
+import sux.client.{Config, Hub, InterfaceOrchestration, InterfaceState}
 import sux.client.rendering.extensions.ExtendedCanvasRenderingContext2D
 import sux.client.rendering.layers.{BackgroundGradientRenderLayer, BackgroundGridRenderLayer, ContextMenuRenderLayer, EntitiesRenderLayer, RenderLayer}
 
@@ -85,7 +85,7 @@ class CanvasRenderer(private val worldState: WorldState, private var camera: Cam
 
     // Global Per-frame Calculations
     // World Time
-    frameInfo.worldTime = System.currentTimeMillis()
+    frameInfo.worldTime = Hub.worldTime
 
     // Mouse Position
     frameInfo.mouseCanvasPosition = InterfaceState.getMouseCanvasPosition.asImmutable()

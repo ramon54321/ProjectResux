@@ -9,6 +9,12 @@ import sux.server.Hub
 object ClientActionHandler {
   def handleClientAction(clientAction: ClientAction, time: Long, webSocket: WebSocket): Unit = clientAction match {
     case ClientActions.Ping(timestamp) => Hub.dispatchTo(WorldActions.Ping(timestamp), webSocket)
+    case ClientActions.Sync(timestamp) => {
+      val now = System.currentTimeMillis()
+      val delay = now - time
+      val offset = now - (timestamp + delay)
+      Hub.dispatchTo(WorldActions.Sync(offset, delay), webSocket)
+    }
     case ClientActions.FullStateUpdate() => Hub.dispatchFullStateTo(webSocket)
     case ClientActions.MoveEntity(entityId, position, moveSpeed) => Orchestration.moveEntity(entityId, Vec2F.fromSerializable(position), moveSpeed)
     case ClientActions.StopEntity(entityId) => Orchestration.stopEntity(entityId)

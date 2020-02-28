@@ -7,6 +7,7 @@ object WorldActions {
   sealed abstract class WorldAction(val kind: String) extends Kinded
   case class Signal(code: Int) extends WorldAction("Signal")
   case class Ping(timestamp: Long) extends WorldAction("Ping")
+  case class Sync(offset: Long, delay: Long) extends WorldAction("Sync")
   case class SpawnHuman(id: String, specTag: String, position: DVec2F.Serializable) extends WorldAction("SpawnHuman")
   case class SpawnItem(id: String, specTag: String, position: DVec2F.Serializable) extends WorldAction("SpawnItem")
   case class SetEntityPosition(id: String, position: DVec2F.Serializable) extends WorldAction("SetEntityPosition")
@@ -19,6 +20,7 @@ object WorldActions {
   object Serializer extends JsonSerializer[WorldAction] {
     addClass[Signal]("Signal")
     addClass[Ping]("Ping")
+    addClass[Sync]("Sync")
     addClass[SpawnHuman]("SpawnHuman")
     addClass[SpawnItem]("SpawnItem")
     addClass[SetEntityPosition]("SetEntityPosition")

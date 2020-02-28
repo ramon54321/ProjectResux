@@ -33,6 +33,13 @@ class WorldState {
   def patch(action: WorldAction): Unit = action match {
     case Signal(code) => println(s"Patching with Signal ${code}")
     case Ping(timestamp) => println(s"Patching with Ping $timestamp")
+    case Sync(offset, delay) => {
+      val syncEnd = System.currentTimeMillis()
+      val syncDuration = syncEnd - syncStart
+      val ping = (syncDuration - delay) / 2
+      timeCorrection = offset - ping
+      println(timeCorrection)
+    }
 
     case SpawnHuman(id, specTag, position) => entitiesById.put(id, new Human(id, specTag, DVec2F.fromSerializable(position)))
     case SpawnItem(id, specTag, position) => entitiesById.put(id, new Item(id, specTag, DVec2F.fromSerializable(position)))
@@ -48,6 +55,8 @@ class WorldState {
     case _ => println(s"[CRITICAL] Unknown WorldAction Received - $action")
   }
 
+  var syncStart = 0L
+  var timeCorrection = 0L
   private val entitiesById = new mutable.HashMap[String, Entity]()
 
   def entities: Iterable[Entity] = entitiesById.values

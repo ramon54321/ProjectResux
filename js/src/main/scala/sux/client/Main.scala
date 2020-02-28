@@ -19,6 +19,9 @@ object Main {
     Hub.webSocket.onopen = _ => {
       println(f"[WS] Connected to server at ${serverAddress}")
       Hub.dispatch(ClientActions.FullStateUpdate())
+      val now = System.currentTimeMillis()
+      Hub.dispatch(ClientActions.Sync(now))
+      Hub.worldState.syncStart = now
     }
     Hub.webSocket.onclose = _ => println("[WS] Closed connection")
     Hub.webSocket.onmessage = event =>
