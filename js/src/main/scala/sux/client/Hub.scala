@@ -18,5 +18,5 @@ object Hub {
     webSocket.send(ClientActions.Serializer.toJson(clientAction))
   }
 
-  def worldTime: Long = System.currentTimeMillis() + worldState.timeCorrection
+  def worldTime: Long = System.currentTimeMillis() + worldState.getTimeCorrection
 }
