@@ -21,11 +21,11 @@ abstract class Entity(val id: String, val specTag: String, var position: DVec2F)
   def toString(time: Long): String = s"ID:   $id\nPOS:  ${position.lookup(time)}"
 }
 
-class Human(id: String, spec: String, position: DVec2F) extends Entity(id, spec, position) with Inventory {
+class Human(id: String, specTag: String, position: DVec2F) extends Entity(id, specTag, position) with Inventory {
 
 }
 
-class Item(id: String, spec: String, position: DVec2F) extends Entity(id, spec, position) {
+class Item(id: String, specTag: String, position: DVec2F) extends Entity(id, specTag, position) {
 
 }
 
